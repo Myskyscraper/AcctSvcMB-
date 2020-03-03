@@ -1,0 +1,15 @@
+.van-nav-bar {
+    background-color: #09b6f2;
+}
+.van-nav-bar__title {
+    color: #fff;
+}
+.van-nav-bar .van-icon {
+    color: #fff;
+}
+.bottomButton {
+    bottom: .3rem;
+    position: absolute;
+    width: 70%;
+    margin-left: 15%;
+}
