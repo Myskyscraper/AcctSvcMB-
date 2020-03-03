@@ -31,7 +31,7 @@ export default {
             var dataToSDK={"Cst_Nm":initData.CrdHldr_Nm,"Crdt_No":initData.CrdHldr_Crdt_No,"phone":initData.MblPh_No,"CstId":"","commAuthFields":""};
             window.WebViewJavascriptBridge.callHandler('invoke',{'action':'faceIdentifyWithCstId','param':dataToSDK},function(responseData){
                 if(responseData.Data.Cnp_Rslt_Ind =="SUCCESS"){
-                     _this.$router.push({ path:'./faceRecog'});
+                     _this.$router.push({ path:'./Sdkactivat'});
                 }
             })
         }   

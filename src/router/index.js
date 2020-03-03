@@ -5,9 +5,14 @@ Vue.use(Router)
 export default new Router({
     routes:[
         {
-            path:"/Sdkactivat",
-            name:'Sdkactivat',
-            component: resolve =>require(['@/view/Sdkactivat.vue'], resolve)
+            path:"/AccMngt",
+            name:'AccMngt',
+            component: resolve =>require(['@/view/AccMngt.vue'], resolve)
+        },
+        {
+            path:"/sdkActivat",
+            name:'sdkActivat',
+            component: resolve =>require(['@/view/sdkActivat.vue'], resolve)
         }, {
             path:"/levalChange",
             name:'levalChange',
