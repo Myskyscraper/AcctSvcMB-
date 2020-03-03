@@ -166,13 +166,14 @@ export default {
              Toast('验证码输入为空，请重新输入');
              return;
         }else{
-
             let params={
                 "DbCrd_CardNo" : initData,
+                "CrdHldr_Crdt_TpCd":"",
+                "CrdHldr_Crdt_No":"",
+                "CrdHldr_Nm":"",//
+                "GtCrd_TpCd":"",
+                "SMS_Vld_CD":"",
                 "MblPh_No" : _this.custTel,
-                "Vld_Cd_Us_Ind" : "1",//验证码使用标志
-                "Tpl_Nm": "manbangActDmt",//模板
-                "TXN_ITT_CHNL_CGY_CODE": "30310139"//
             }
            this.$http("URL","P5OIS6Y27",params,true,false).then(res=>{
                     console.log("短信获取成功",res)
