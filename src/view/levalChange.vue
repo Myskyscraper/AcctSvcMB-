@@ -94,7 +94,7 @@ export default {
       bank_account: "",
       custTel: "",
       custName: "",
-      custBankId: "",
+      custBankId: "", 
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
@@ -105,6 +105,15 @@ export default {
         { id: 4, name: "zs4" },
         { id: 5, name: "zs5" },
         { id: 6, name: "zs6" }
+      ],
+      typeOneAccoInfo:[
+
+      ],
+       typeTwoAccoInfo:[
+
+      ],
+      typeThreeAccoInfo:[
+
       ]
     };
   },
@@ -134,12 +143,30 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
+    initDataGetApp(){
+        var _this=this
+            this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
+                bridge.callHandler('invoke', {
+                    "action" : "userData"
+                }, function(responseData) {
+                    console.log("responseData",responseData)
+                    _this.$store.commit('initDataSave',responseData )
+                    if(_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)){
+                        _this.$store.commit('rqs_Jrnl_No_Change',_this.$ccbskObj.generateRqsJrnlNo() )
+                    }else{
+                        _this.$store.commit('rqs_Jrnl_No_Change',responseData.Rqs_Jrnl_No )
+                    };
+                    //_this.initData(responseData);
+                });
+            });
+    },
     initData() {
       var _this = this;
+      const respFromApp = this.$store.state.initData;
       let params = {
-        "Id_Crdt_Tpcd": "", //识别证件类型代码
-        "Id_Crdt_No": "", //证件号码
-        "Id_IdvLgl_Nm": "", //法定名称
+        "Id_Crdt_Tpcd": "1010", //识别证件类型代码
+        "Id_Crdt_No": respFromApp.Id_Crdt_No, //证件号码
+        "Id_IdvLgl_Nm": respFromApp.Id_IdvLgl_Nm, //法定名称
         "Setl_Acc_CLCd": "A", //
         "TrdPt_Sign_Agrm_ID": "", //第三方签约编号
         "TXN_ITT_CHNL_CGY_CODE": "30310139",
@@ -157,6 +184,13 @@ export default {
                return;
           }else{
                _this.bankCardInfo = res.Data.ACCOUNT_GROUP;
+               let accountInfo = res.Data.ACCOUNT_GROUP;
+               accountInfo.forEach((item,index)=>{
+                 if(item.PD_Sign_Ind=="A"){
+                    _this.typeOneAccoInfo.push(item);
+                 }
+               })
+
           }
         })
         .catch(err => {
@@ -177,7 +211,7 @@ export default {
           "DbCrd_CardNo": initData,
           "MblPh_No": _this.custTel,
           "Vld_Cd_Us_Ind": "1", //验证码使用标志
-          "Tpl_Nm": "manbangActAct", //模板
+          "Tpl_Nm": "manbangActDmt", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)

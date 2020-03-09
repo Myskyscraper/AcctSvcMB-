@@ -16,7 +16,6 @@
         </van-cell-group>
       </div>
 
-
        <!-- 协议内容和勾选 -->
       <p class="warning">温馨提示</p>
 
@@ -96,8 +95,6 @@ export default {
   data() {
     return {
       canFlag: true,
-      bank_account: "",
-      display_bank_account: "",
       longChecked: true,
       custTel: "",
       custName: "",
@@ -105,11 +102,11 @@ export default {
       smsMes: "",
       timeNum: 60,
       disabled: true,//控制提交按钮能否点击 false为可以点击 true为禁止状态
-      rulerFlag:false
+      rulerFlag:false//展示更多
     };
   },
   created() {
-    this.initData();
+    //this.initData();
   },
   computed: {
     verCodeText: function() {
@@ -126,7 +123,29 @@ export default {
     showMoreRuler(){
       this.rulerFlag = !this.rulerFlag;
     },
-    initData() {},
+    initData(){
+      var _this = this;
+      const respFromApp = this.$store.state.initData;
+      this.custName = respFromApp.custName;
+      this.custBankId = respFromApp.custBankId;
+    },
+    initDataGetApp(){
+        var _this=this
+            this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
+                bridge.callHandler('invoke', {
+                    "action" : "userData"
+                }, function(responseData) {
+                    console.log("responseData",responseData)
+                    _this.$store.commit('initDataSave',responseData )
+                    if(_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)){
+                        _this.$store.commit('rqs_Jrnl_No_Change',_this.$ccbskObj.generateRqsJrnlNo() )
+                    }else{
+                        _this.$store.commit('rqs_Jrnl_No_Change',responseData.Rqs_Jrnl_No )
+                    };
+                    //_this.initData(responseData);
+                });
+            });
+    },
     verificationRun() {
       var _this = this;
       let initData = this.$store.state.initData;
@@ -167,6 +186,7 @@ export default {
     },
     subBtn() {
       var _this = this;
+      const respFromApp = this.$store.state.initData;
       if (_this.$ccbskObj.isnull(_this.custName)) {
         Toast("姓名不能为空，请重新输入");
         return;
@@ -179,22 +199,25 @@ export default {
       } else if (_this.$ccbskObj.isnull(_this.smsMes)) {
         Toast("验证码输入为空，请重新输入");
         return;
-      } else {
+      } else if((_this.smsMes.length<4)||(_this.smsMes.length74)){
+         Toast("验证码格式不对，请重新输入");
+         return;
+      }else{
         let params = {
-          DbCrd_CardNo: initData,//借记卡卡号
-          CrdHldr_Crdt_TpCd: "1010",//持卡人证件类型代码
-          CrdHldr_Crdt_No: "",//持卡人证件号码
-          CrdHldr_Nm: "", //持卡人证件姓名
-          GtCrd_TpCd: "08",//领卡类型代码
-          SMS_Vld_CD: "",//短信验证码
-          MblPh_No: _this.custTel//手机号
+          "DbCrd_CardNo": respFromApp.DbCrd_CardNo,//借记卡卡号
+          "CrdHldr_Crdt_TpCd": "1010",//持卡人证件类型代码
+          "CrdHldr_Crdt_No": "",//持卡人证件号码
+          "CrdHldr_Nm": "", //持卡人证件姓名
+          "GtCrd_TpCd": "08",//领卡类型代码
+          "SMS_Vld_CD": _this.smsMes,//短信验证码
+          "MblPh_No": _this.custTel//手机号
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
           .then(res => {
-            console.log("短信获取成功", res);
+            console.log("激活成功", res);
           })
           .catch(err => {
-            console.log("短信获取失败", err);
+            console.log("激活失败", err);
             Toast(err.Head.SYS_RESP_DESC);
           });
       }
