@@ -1,87 +1,70 @@
 <template>
-  <div>
+  <div id="sdkActive">
     <van-nav-bar title="激活银行卡" left-arrow @click-left="back" />
 
+    <div class="head_wrap">
+      <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
+      <h5 class="title_cardInfo">{{custBankId}} I类卡</h5>
+    </div>
 
-    <van-cell-group>
-      <div class="bank-wrap-box" style="padding-left:30px;">
-        <van-cell-group>
-          <van-field v-model="custName" placeholder="姓名" label="姓名" />
-        </van-cell-group>
-      </div>
-
-      <div class="bank-wrap-box" style="padding-left:30px;">
-        <van-cell-group>
-          <van-field v-model="custBankId" placeholder label="满帮龙卡" />
-        </van-cell-group>
-      </div>
-
-       <!-- 协议内容和勾选 -->
-      <p class="warning">温馨提示</p>
-
-      <ul class="wrning-txt">
+      <ul class="wrning_txt"  @click="showMoreRuler()">
         <li>1.预激活完成后，向该账户存款转账不限制，付款功能仅支持在货车帮及运满满APP平台发生相关业务；</li>
         <li>2.我行将邮寄银行卡，请注意查收。请收到银行卡后携带身份证、银行卡到就近建设银行网点激活即可享受卡片优惠。</li>
-        <p class="contr_tap" @click="showMoreRuler()">点击展示</p>
-       <div v-show="rulerFlag">
-        <li>3：本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
-        <li>4：按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
-        <li>5:按照人民银行相关要求，个人I类账户数量受限，如开立账户为二类账户后向非绑定账户转账，存取现金，消费缴费累计限金额合计一万元。</li>
-       </div>
+        <div v-show="rulerFlag">
+          <li>3：本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
+          <li>4：按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
+        </div>
+         <p class="contr_tap">{{promptInfo}}</p>
       </ul>
 
-      <p class="warning strong">可办理以下业务</p>
-
-      <div style="height:5px;"></div>
-
+       <div style="height:15px;"></div>
+       <p class="warning strong">您还可以办理以下自动业务</p>
       <div class="inp-content">
         <div class="checkbox-wrap">
           <div class="spc contrc_wrap">
-            <span class="colorBlue contrc-left">签约ETC费自动扣款服务</span>
-
             <van-checkbox v-model="longChecked"></van-checkbox>
-
             <span class="contrc-right">《满帮ETC服务代扣协议》</span>
-          </div>
-
-          <div class="spc contrc_wrap">
-            <span class="colorBlue contrc-left">签约贷款自动还款服务</span>
-
-            <van-checkbox v-model="longChecked"></van-checkbox>
-
-            <span class="contrc-right">《满帮贷款代扣协议》</span>
           </div>
         </div>
       </div>
 
+      <div style="height:28px;"></div>
       <!-- 手机和短信 -->
       <div class="inp-content">
         <div class="checkbox-wrap">
           <van-cell-group>
-            <van-field v-model="custTel" placeholder="联系电话" label="联系电话" />
+            <van-field v-model="custTel" placeholder="联系电话" type="tel"/>
           </van-cell-group>
 
           <van-row>
-            <van-col span="12">
-              <van-field v-model="smsMes" />
+            <van-col span="18">
+              <van-field v-model="smsMes"   />
             </van-col>
-            <van-col span="8">
-              <van-button type="primary" size="small" @click="verificationRun">{{verCodeText}}</van-button>
+            <van-col span="6">
+              <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
             </van-col>
           </van-row>
         </div>
       </div>
-    </van-cell-group>
+
+
+    <div class="contrc_wrap_smlall">
+         <van-checkbox v-model="longChecked"></van-checkbox>
+         <span>我已阅读并同意：</span>
+         <span>《xxxxxxxx协议》</span>
+         <span>《中国建设银行代收业》</span>
+    </div>
 
     <van-button
       size="normal"
       plain
       round
       margin="10px"
-      color="#09b6f2"
+      color="#FFD338"
       type="number"
       class="bottomButton"
       :hairline="true"
+      style="background:#FFD338;color:#333;"
       @click="subBtn"
     >确认提交</van-button>
   </div>
@@ -98,11 +81,11 @@ export default {
       longChecked: true,
       custTel: "",
       custName: "",
-      custBankId: "",
+      custBankId: "62170071XXXXXXXX001",
       smsMes: "",
       timeNum: 60,
-      disabled: true,//控制提交按钮能否点击 false为可以点击 true为禁止状态
-      rulerFlag:false//展示更多
+      disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
+      rulerFlag: false //展示更多
     };
   },
   created() {
@@ -113,6 +96,9 @@ export default {
       return this.timeNum > 59
         ? "重新发送"
         : "(" + this.timeNum + ")s后重新发送";
+    },
+    promptInfo(){
+        return this.rulerFlag==false?"点击展开":"点击关闭"
     }
   },
   mounted() {},
@@ -120,31 +106,41 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    showMoreRuler(){
+    showMoreRuler() {
       this.rulerFlag = !this.rulerFlag;
     },
-    initData(){
+    initData() {
       var _this = this;
       const respFromApp = this.$store.state.initData;
-      this.custName = respFromApp.custName;
-      this.custBankId = respFromApp.custBankId;
+      this.custName = respFromApp.CrdHldr_Nm;
+      this.custBankId = respFromApp.DbCrd_CardNo;
     },
-    initDataGetApp(){
-        var _this=this
-            this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
-                bridge.callHandler('invoke', {
-                    "action" : "userData"
-                }, function(responseData) {
-                    console.log("responseData",responseData)
-                    _this.$store.commit('initDataSave',responseData )
-                    if(_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)){
-                        _this.$store.commit('rqs_Jrnl_No_Change',_this.$ccbskObj.generateRqsJrnlNo() )
-                    }else{
-                        _this.$store.commit('rqs_Jrnl_No_Change',responseData.Rqs_Jrnl_No )
-                    };
-                    //_this.initData(responseData);
-                });
-            });
+    initDataGetApp() {
+      var _this = this;
+      this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
+        bridge.callHandler(
+          "invoke",
+          {
+            action: "userData"
+          },
+          function(responseData) {
+            console.log("responseData", responseData);
+            _this.$store.commit("initDataSave", responseData);
+            if (_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)) {
+              _this.$store.commit(
+                "rqs_Jrnl_No_Change",
+                _this.$ccbskObj.generateRqsJrnlNo()
+              );
+            } else {
+              _this.$store.commit(
+                "rqs_Jrnl_No_Change",
+                responseData.Rqs_Jrnl_No
+              );
+            }
+            //_this.initData(responseData);
+          }
+        );
+      });
     },
     verificationRun() {
       var _this = this;
@@ -156,11 +152,11 @@ export default {
         }
         this.verificationNum();
         let params = {
-          DbCrd_CardNo: initData,
-          MblPh_No: _this.custTel,
-          Vld_Cd_Us_Ind: "1", //验证码使用标志
-          Tpl_Nm: "manbangActAct", //模板
-          TXN_ITT_CHNL_CGY_CODE: "30310139" //
+          "DbCrd_CardNo": initData.DbCrd_CardNo,
+          "MblPh_No": _this.custTel,
+          "Vld_Cd_Us_Ind": "1", //验证码使用标志
+          "Tpl_Nm": "manbangActAct", //模板
+          "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
           .then(res => {
@@ -199,18 +195,18 @@ export default {
       } else if (_this.$ccbskObj.isnull(_this.smsMes)) {
         Toast("验证码输入为空，请重新输入");
         return;
-      } else if((_this.smsMes.length<4)||(_this.smsMes.length74)){
-         Toast("验证码格式不对，请重新输入");
-         return;
-      }else{
+      } else if (_this.smsMes.length < 4 || _this.smsMes.length74) {
+        Toast("验证码格式不对，请重新输入");
+        return;
+      } else {
         let params = {
-          "DbCrd_CardNo": respFromApp.DbCrd_CardNo,//借记卡卡号
-          "CrdHldr_Crdt_TpCd": "1010",//持卡人证件类型代码
-          "CrdHldr_Crdt_No": "",//持卡人证件号码
-          "CrdHldr_Nm": "", //持卡人证件姓名
-          "GtCrd_TpCd": "08",//领卡类型代码
-          "SMS_Vld_CD": _this.smsMes,//短信验证码
-          "MblPh_No": _this.custTel//手机号
+          "DbCrd_CardNo": respFromApp.DbCrd_CardNo, //借记卡卡号
+          "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
+          "CrdHldr_Crdt_No": respFromApp.CrdHldr_Crdt_No, //持卡人证件号码
+          "CrdHldr_Nm": respFromApp.CrdHldr_Nm, //持卡人证件姓名
+          "GtCrd_TpCd": "08", //领卡类型代码
+          "SMS_Vld_CD": _this.smsMes, //短信验证码
+          "MblPh_No": _this.custTel //手机号
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
           .then(res => {
@@ -227,6 +223,25 @@ export default {
 </script>
 
 <style scoped>
+#sdkActive {
+  font-size: 14px;
+}
+.head_wrap {
+  padding-top: 15px;
+  font-family: PingFangSC-Medium;
+  font-size: 18px;
+  color: #1f2533;
+  text-align: center;
+}
+.title_info {
+  margin-bottom: 5px;
+}
+.title_cardInfo {
+  font-size: 18px;
+  color: #1f2533;
+  text-align: center;
+}
+
 .bank-wrap-box {
   height: 44px;
   display: flex;
@@ -243,21 +258,22 @@ export default {
 }
 
 .warning {
-  font-size: 12px;
-  padding-left: 20px;
-  line-height: 30px;
-  color: black;
+ font-family: PingFangSC-Regular;
+font-size: 13px;
+color: #999999;
+padding: 0 25px;
 }
 .strong {
   color: black;
+  margin: 5px 0;
 }
 
-.wrning-txt {
-  color: #666;
-  padding: 0 30px;
-  font-size: 12px;
-  line-height: 20px;
-  margin-bottom: 10px;
+.wrning_txt {
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #999999;
+    line-height: 18px;
+    padding: 10px 25px;
 }
 
 .inp-content {
@@ -278,6 +294,9 @@ export default {
 }
 
 .contrc_wrap span {
+  font-family: PingFangSC-Regular;
+  font-size: 15px;
+  color: #333333;
   line-height: 30px;
 }
 
@@ -285,9 +304,34 @@ export default {
   width: 166px;
 }
 
-.contr_tap{
-  text-align: center;
-  color: red;
-  font-size: 16px;
+.contr_tap {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #4FA0FB;
 }
+
+.van-button--yellow {
+    color: #fff;
+    background-color: #FFD338;
+    border: 1px solid  #FFD338;
+    color: #333333;
+}
+.van-checkbox__icon .van-icon{
+  border:1px solid #333;
+}
+
+.contrc_wrap_smlall{
+  margin-top: 30px;
+   padding-left: 30px;
+   display: flex;
+   font-size: 12px;
+}
+
+.van-button--normal{
+  color: #333;
+}
+.van-button__text{
+  color: #333;
+}
+
 </style>
