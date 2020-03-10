@@ -81,14 +81,14 @@ export default {
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
-      bankCardInfo1: [{ id: 1234567890, name: "zs1" }],
+      bankCardInfo1: [{ id: "12345678900", name: "zs1" }],
       bankCardInfo: [
-        { id: 1234567890, name: "zs1" },
-        { id: 1234567890, name: "zs2" },
-        { id: 1234567890, name: "zs3" },
-        { id: 1234567890, name: "zs4" },
-        { id: 1234567890, name: "zs5" },
-        { id: 1234567890, name: "zs6" }
+        { id: "12345678901", name: "zs1" },
+        { id:"12345678902", name: "zs2" },
+        { id: "12345678903", name: "zs3" },
+        { id:"12345678904", name: "zs4" },
+        { id: "12345678905", name: "zs5" },
+        { id: "12345678906", name: "zs6" }
       ],
       typeOneAccoInfo: [],
       typeTwoAccoInfo: [],
@@ -102,7 +102,7 @@ export default {
     verCodeText: function() {
       return this.timeNum > 59
         ? "重新发送"
-        : "(" + this.timeNum + ")s后重新发送";
+        : "(" + this.timeNum + ")s";
     }
   },
   filters: {

@@ -23,7 +23,7 @@
         <div class="checkbox-wrap">
           <div class="spc contrc_wrap">
             <van-checkbox v-model="longChecked"></van-checkbox>
-            <span class="contrc-right">《满帮ETC服务代扣协议》</span>
+            <span class="contrc-right">&nbsp;签约贷款自动代扣还款服务</span>
           </div>
         </div>
       </div>
@@ -50,9 +50,8 @@
 
     <div class="contrc_wrap_smlall">
          <van-checkbox v-model="longChecked"></van-checkbox>
-         <span>我已阅读并同意：</span>
-         <span>《xxxxxxxx协议》</span>
-         <span>《中国建设银行代收业》</span>
+         <span style="width:10px;"></span>
+         <span>&nbsp;我已阅读并同意：《中国建设银行代收业务和扣款授权协议》</span>
     </div>
 
     <van-button
@@ -80,7 +79,7 @@ export default {
       canFlag: true,
       longChecked: true,
       custTel: "",
-      custName: "",
+      custName: "张三",
       custBankId: "62170071XXXXXXXX001",
       smsMes: "",
       timeNum: 60,
@@ -95,7 +94,7 @@ export default {
     verCodeText: function() {
       return this.timeNum > 59
         ? "重新发送"
-        : "(" + this.timeNum + ")s后重新发送";
+        : "(" + this.timeNum + ")s";
     },
     promptInfo(){
         return this.rulerFlag==false?"点击展开":"点击关闭"
