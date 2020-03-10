@@ -51,7 +51,7 @@
     <div class="contrc_wrap_smlall">
          <van-checkbox v-model="longChecked"></van-checkbox>
          <span style="width:10px;"></span>
-         <span>&nbsp;我已阅读并同意：《中国建设银行代收业务和扣款授权协议》</span>
+         <span>&nbsp;我已阅读并同意：<router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link></span>
     </div>
 
     <van-button

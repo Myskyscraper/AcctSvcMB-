@@ -12,7 +12,10 @@ export default new Router({
         {
             path:"/sdkActivat",
             name:'sdkActivat',
-            component: resolve =>require(['@/view/sdkActivat.vue'], resolve)
+            component: resolve =>require(['@/view/sdkActivat.vue'], resolve),
+            meta:{
+                keepAlive:true
+            }
         }, {
             path:"/levalChange",
             name:'levalChange',
@@ -30,6 +33,11 @@ export default new Router({
             path:"/walletMain",
             name:'walletMain',
             component: resolve =>require(['@/view/walletMain.vue'], resolve)
+        },
+        {
+            path:"/contract",
+            name:'contract',
+            component: resolve =>require(['@/view/contract.vue'], resolve)
         }
         
     ]

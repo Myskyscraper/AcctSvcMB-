@@ -2,7 +2,10 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <!-- shouye -->
-    <router-view/>
+   <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
     <loading></loading>
   </div>
 </template>
