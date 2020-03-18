@@ -39,7 +39,7 @@
             <van-col span="18">
               <van-field v-model="smsMes"   />
             </van-col>
-            <van-col span="6">
+            <van-col span="6" class="mesBtn">
               <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
             </van-col>
           </van-row>
@@ -50,7 +50,7 @@
     <div class="contrc_wrap_smlall">
          <van-checkbox v-model="signChecked"></van-checkbox>
          <span style="width:10px;"></span>
-         <span>&nbsp;我已阅读并同意：<router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link></span>
+         <span>&nbsp;我已阅读并同意:<router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link></span>
     </div>
 
     <van-button
@@ -350,6 +350,9 @@ padding: 0 25px;
 }
 .van-button__text{
   color: #333;
+}
+.mesBtn{
+  margin-top:9px;
 }
 
 </style>

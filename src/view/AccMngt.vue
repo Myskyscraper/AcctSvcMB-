@@ -15,7 +15,8 @@ export default {
     components:{},
     props:[],
     created(){
-        console.log("创建后")
+        console.log("创建后");
+        this.gotoUrl();
     },
     mounted(){
         console.log("模板编译组件挂载后")
@@ -33,7 +34,14 @@ export default {
     destoryed(){
         console.log("组件销毁后")
     },
-    methods:{}
+    methods:{
+       gotoUrl(){
+        this.$router.push({
+           path: '/FaceRecog',
+           query: { from: 'accMngt'}
+        })
+      }
+    }
     
 }
 </script>

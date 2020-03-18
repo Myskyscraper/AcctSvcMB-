@@ -7,24 +7,12 @@ export default new Router({
         {
             path: "/AccMngt",
             name: 'AccMngt',
-            component: resolve => require(['@/view/AccMngt.vue'], resolve),
-            children: [
-                {
-                    path: '/AccMngt',
-                    redirect: { path: '/FaceRecog', query: { from: 'accMngt'}}
-                }
-            ]
+            component: resolve => require(['@/view/AccMngt.vue'], resolve)
         },
         {
-            path: "/SdkActivat",
-            name: 'SdkActivat',
-            component: resolve => require(['@/view/SdkActivat.vue'], resolve),
-            children: [
-                {
-                    path: '/SdkActivat',
-                    redirect: { path: '/FaceRecog', query: { from: 'sdkActivat' } }
-                }
-            ]
+            path: "/SdkActivate",
+            name: 'SdkActivate',
+            component: resolve => require(['@/view/SdkActivate.vue'], resolve)
         },
         {
             path: "/SdkActivatCon",
