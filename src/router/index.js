@@ -3,43 +3,52 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
-    routes:[
+    routes: [
         {
-            path:"/AccMngt",
-            name:'AccMngt',
-            component: resolve =>require(['@/view/AccMngt.vue'], resolve)
+            path: "/AccMngt",
+            name: 'AccMngt',
+            component: resolve => require(['@/view/AccMngt.vue'], resolve),
+            children: [
+                {
+                    path: '/AccMngt',
+                    redirect: { path: '/FaceRecog', query: { from: 'accMngt'}}
+                }
+            ]
         },
         {
-            path:"/sdkActivat",
-            name:'sdkActivat',
-            component: resolve =>require(['@/view/sdkActivat.vue'], resolve),
-            meta:{
-                keepAlive:true
+            path: "/SdkActivat",
+            name: 'SdkActivat',
+            component: resolve => require(['@/view/SdkActivat.vue'], resolve),
+            children: [
+                {
+                    path: '/SdkActivat',
+                    redirect: { path: '/FaceRecog', query: { from: 'sdkActivat' } }
+                }
+            ]
+        },
+        {
+            path: "/SdkActivatCon",
+            name: 'SdkActivatCon',
+            component: resolve => require(['@/view/SdkActivatCon.vue'], resolve),
+            meta: {
+                keepAlive: true
             }
         }, {
-            path:"/levalChange",
-            name:'levalChange',
-            component: resolve =>require(['@/view/levalChange.vue'], resolve)
-        }, {
-            path:"/signTreaty",
-            name:'signTreaty',
-            component: resolve =>require(['@/view/signTreaty.vue'], resolve)
-        },{
-            path:"/faceRecog",
-            name:'faceRecog',
-            component: resolve =>require(['@/view/faceRecog.vue'], resolve)
+            path: "/AccMngtCon",
+            name: 'AccMngtCon',
+            component: resolve => require(['@/view/AccMngtCon.vue'], resolve),
         },
         {
-            path:"/walletMain",
-            name:'walletMain',
-            component: resolve =>require(['@/view/walletMain.vue'], resolve)
+            path: "/FaceRecog",
+            name: 'FaceRecog',
+            component: resolve => require(['@/view/FaceRecog.vue'], resolve)
         },
         {
-            path:"/contract",
-            name:'contract',
-            component: resolve =>require(['@/view/contract.vue'], resolve)
+            path: "/Contract",
+            name: 'Contract',
+            component: resolve => require(['@/view/Contract.vue'], resolve)
         }
-        
+
     ]
 })
 

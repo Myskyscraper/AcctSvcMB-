@@ -1,12 +1,10 @@
 <template>
     <div id="textmodel">
-       <p class="test">
-           测试入口的
-       </p>
+       
     </div>
 </template>
 <script>
-// import CityModel from "./CityModel";
+
 export default {
     name:"",
     data(){
@@ -40,9 +38,8 @@ export default {
 }
 </script>
 <style scoped>
-    .test{
-        font-size:12px;
-    }
+    
+
 </style>
 
 
