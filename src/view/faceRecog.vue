@@ -1,6 +1,6 @@
 <template>
   <div id="face_recog">
-    
+    <van-nav-bar title="人脸校验" left-arrow @click-left="back" />
     <van-button
       size="normal"
       plain
@@ -13,28 +13,25 @@
       @click="faceRecog"
     >点击进行人脸识别</van-button>
 
-    <div id="test" @click="gotoUrl()">
-      测试跳转路径
-    </div>
+    <div id="test" @click="gotoUrl()">测试跳转路径</div>
   </div>
 </template>
 
 <script>
+import { Dialog, Toast } from "vant";
 export default {
-    data () {
-        return {
-            
-        }
-    },
-    created(){
-        // console.log("创建后")
-        setTimeout(() => {
-            console.log("开始执行初始化函数")
-            this.initDataGetApp()
-        }, 300);
-    },
-    methods: {
-      initDataGetApp() {
+  data() {
+    return {};
+  },
+  created() {
+    // console.log("创建后")
+    setTimeout(() => {
+      console.log("开始执行初始化函数");
+      this.initDataGetApp();
+    }, 300);
+  },
+  methods: {
+    initDataGetApp() {
       var _this = this;
       this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
         bridge.callHandler(
@@ -62,46 +59,61 @@ export default {
       });
     },
 
-        
-        faceRecog(){
-            var _this = this;
-            var url =_this.$route.query.from;
-            const respFromApp = this.$store.state.initData;
-            if(_this.$ccbskObj.isnull(respFromApp)){
-               Toast("正在请求数据，请稍后再重试");
-               return;
-            }else{
-              var dataToSDK={"Cst_Nm":respFromApp.CrdHldr_Nm,"Crdt_No":respFromApp.CrdHldr_Crdt_No,"phone":respFromApp.MblPh_No};
-              window.WebViewJavascriptBridge.callHandler('invoke',{'action':'faceIdentify','param':dataToSDK},function(responseData){
-                  if(responseData.Data.Cnp_Rslt_Ind =="SUCCESS"){
-                        if(url=="accMngt"){
-                          _this.$router.push({ path:'./AccMngtCon'});
-                        }else{
-                            _this.$router.push({ path:'./SdkactivatCon'});
-                        }
-                  }
-              })
+    back() {
 
+    },
+    faceRecog() {
+      var _this = this;
+      var url = _this.$route.query.from;
+      const respFromApp = this.$store.state.initData;
+      if (_this.$ccbskObj.isnull(respFromApp)) {
+        Toast("正在请求数据，请稍后再试");
+        return;
+      } else {
+        console.log("dataToSDK");
+        var dataToSDK = {
+          Cst_Nm: respFromApp.CrdHldr_Nm,
+          Crdt_No: respFromApp.CrdHldr_Crdt_No,
+          phone: respFromApp.mblphNo
+        };
+        console.log("dataToSDK", dataToSDK);
+        window.WebViewJavascriptBridge.callHandler(
+          "invoke",
+          { action: "faceIdentify", param: dataToSDK },
+          function(responseData) {
+            console.log("刷脸返回的信息", responseData);
+            let rspCdDSC = responseData.Head.Txn_Rsp_Cd_Dsc;
+            let rspInf = responseData.Head.Txn_Rsp_Inf;
+            if (responseData.Data.Cmp_Rslt_Ind == "SUCCESS") {
+              if (url == "accMngt") {
+                _this.$router.push({ path: "./AccMngtCon" });
+              } else {
+                _this.$router.push({ path: "./SdkActivateCon" });
+              }
+            } else {
+              Toast.fail(rspCdDSC + rspInf);
             }
-            
-        },
-        gotoUrl(){
-          var _this =this;
-          var str = _this.$route.query.from;
-          if(str=="accMngt"){
-              _this.$router.push({ path:'./AccMngtCon'});
-          }else{
-             _this.$router.push({ path:'./SdkactivatCon'});
           }
-          console.log("ok",str);
-        }   
+        );
+      }
+    },
+    gotoUrl() {
+      var _this = this;
+      var str = _this.$route.query.from;
+
+      if (str == "accMngt") {
+        _this.$router.push({ path: "./AccMngtCon" });
+      } else {
+        _this.$router.push({ path: "./SdkactivateCon" });
+      }
+      console.log("ok", str);
     }
+  }
 };
 </script>
 
 <style scoped>
-#test{
+#test {
   font-size: 14px;
 }
-
 </style>

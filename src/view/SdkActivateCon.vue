@@ -3,7 +3,7 @@
     <van-nav-bar title="激活银行卡" left-arrow @click-left="back" />
     <div class="head_wrap">
       <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
-      <h5 class="title_cardInfo">{{custBankId}} I类卡</h5>
+      <h5 class="title_cardInfo">{{custBankId}} </h5>
     </div>
 
       <ul class="wrning_txt"  @click="showMoreRuler()">
@@ -87,7 +87,7 @@ export default {
     };
   },
   created() {
-    //this.initData();
+    this.initData();
   },
   computed: {
     verCodeText: function() {
@@ -112,33 +112,7 @@ export default {
       const respFromApp = this.$store.state.initData;
       this.custName = respFromApp.CrdHldr_Nm;
       this.custBankId = respFromApp.DbCrd_CardNo;
-    },
-    initDataGetApp() { 
-      var _this = this;
-      this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
-        bridge.callHandler(
-          "invoke",
-          {
-            action: "userData"
-          },
-          function(responseData) {
-            console.log("responseData", responseData);
-            _this.$store.commit("initDataSave", responseData);
-            if (_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)) {
-              _this.$store.commit(
-                "rqs_Jrnl_No_Change",
-                _this.$ccbskObj.generateRqsJrnlNo()
-              );
-            } else {
-              _this.$store.commit(
-                "rqs_Jrnl_No_Change",
-                responseData.Rqs_Jrnl_No
-              );
-            }
-            //_this.initData(responseData);
-          }
-        );
-      });
+      this.custTel = respFromApp.mblphNo;
     },
     verificationRun() {
       var _this = this;
@@ -153,7 +127,7 @@ export default {
           "DbCrd_CardNo": initData.DbCrd_CardNo,
           "MblPh_No": _this.custTel,
           "Vld_Cd_Us_Ind": "1", //验证码使用标志
-          "Tpl_Nm": "manbangActAct", //模板
+          "Tpl_Nm": "manbangAct", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
@@ -178,16 +152,35 @@ export default {
         this.timeNum = 60;
       }
     },
+    queryContractInfo(){
+       const respFromApp = this.$store.state.initData;
+       let params = {
+         "ORG_TX_ID":"P5C01Q701",
+         "TrdPCt_Crdt_TpCd":'1010',
+         "Cst_Nm":respFromApp.CrdHldr_Nm,//姓名
+         "TrdPCt_AccNo":respFromApp.DbCrd_CardNo,//银行卡号
+         "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
+        };
+        this.$http("URL", "P5C01Q701", params, true, false)
+          .then(res => {
+            console.log("查询合约信息成功", res);
+          })
+          .catch(err => {
+            console.log("查询合约信息失败", err);
+            Toast(err.Head.SYS_RESP_DESC);
+        });
+    },
     withHold(){
       // 代扣协议
+       const respFromApp = this.$store.state.initData;
        let params = {
-          "DbCrd_CardNo": respFromApp.DbCrd_CardNo, //借记卡卡号
-          "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
-          "CrdHldr_Crdt_No": respFromApp.CrdHldr_Crdt_No, //持卡人证件号码
-          "CrdHldr_Nm": respFromApp.CrdHldr_Nm, //持卡人证件姓名
-          "GtCrd_TpCd": "08", //领卡类型代码
-          "SMS_Vld_CD": _this.smsMes, //短信验证码
-          "MblPh_No": _this.custTel //手机号
+         "ORG_TX_ID":"P5C01Q700",
+         "Entrst_Prj_ID":'',//项目编号
+         "TrdPCt_ID_Fst_ID":'',//客户唯一编号
+         "Cst_Nm":respFromApp.CrdHldr_Nm,//姓名
+         "TrdPCt_AccNo":respFromApp.DbCrd_CardNo,//银行卡号
+         "SRP_Cst_TpCd":'',//银行卡类型
+         "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
           .then(res => {
@@ -222,9 +215,10 @@ export default {
           "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
           "CrdHldr_Crdt_No": respFromApp.CrdHldr_Crdt_No, //持卡人证件号码
           "CrdHldr_Nm": respFromApp.CrdHldr_Nm, //持卡人证件姓名
-          "GtCrd_TpCd": "08", //领卡类型代码
+          "GtCrd_TpCd": "14", //新卡激活
           "SMS_Vld_CD": _this.smsMes, //短信验证码
-          "MblPh_No": _this.custTel //手机号
+          "MblPh_No": _this.custTel, //手机号
+          "TrckEndToETCphrtxVal":''
         };
         this.$http("URL", "P5OIS6Y27", params, true, false)
           .then(res => {

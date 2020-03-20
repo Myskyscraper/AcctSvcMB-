@@ -15,9 +15,9 @@ export default new Router({
             component: resolve => require(['@/view/SdkActivate.vue'], resolve)
         },
         {
-            path: "/SdkActivatCon",
-            name: 'SdkActivatCon',
-            component: resolve => require(['@/view/SdkActivatCon.vue'], resolve),
+            path: "/SdkActivateCon",
+            name: 'SdkActivateCon',
+            component: resolve => require(['@/view/SdkActivateCon.vue'], resolve),
             meta: {
                 keepAlive: true
             }
@@ -35,6 +35,11 @@ export default new Router({
             path: "/Contract",
             name: 'Contract',
             component: resolve => require(['@/view/Contract.vue'], resolve)
+        },
+         {
+            path: "/test",
+            name: 'test',
+            component: resolve => require(['@/view/test.vue'], resolve)
         }
 
     ]
