@@ -1,17 +1,19 @@
 <template>
   <div id="face_recog">
     <van-nav-bar title="人脸校验" left-arrow @click-left="back" />
+    <p class="warmint_info">拍摄您本人人脸，请确保正对手机，光线充足</p>
     <van-button
       size="normal"
       plain
       round
       margin="10px"
-      color="#09b6f2"
       type="number"
       class="bottomButton"
       :hairline="true"
       @click="faceRecog"
-    >点击进行人脸识别</van-button>
+      style="background: rgb(255, 211, 56);
+    color: #000;"
+    >采集本人人脸</van-button>
 
     <div id="test" @click="gotoUrl()">测试跳转路径</div>
   </div>
@@ -70,17 +72,9 @@ export default {
         Toast("正在请求数据，请稍后再试");
         return;
       } else {
-        console.log("dataToSDK");
-        var dataToSDK = {
-          Cst_Nm: respFromApp.CrdHldr_Nm,
-          Crdt_No: respFromApp.CrdHldr_Crdt_No,
-          phone: respFromApp.mblphNo
-        };
+        var dataToSDK = {"Cst_Nm": respFromApp.CrdHldr_Nm,"Crdt_No": respFromApp.CrdHldr_Crdt_No,"phone": respFromApp.mblphNo};
         console.log("dataToSDK", dataToSDK);
-        window.WebViewJavascriptBridge.callHandler(
-          "invoke",
-          { action: "faceIdentify", param: dataToSDK },
-          function(responseData) {
+        window.WebViewJavascriptBridge.callHandler("invoke",{ "action": "faceIdentify","param": dataToSDK },function(responseData) {
             console.log("刷脸返回的信息", responseData);
             let rspCdDSC = responseData.Head.Txn_Rsp_Cd_Dsc;
             let rspInf = responseData.Head.Txn_Rsp_Inf;
@@ -113,6 +107,11 @@ export default {
 </script>
 
 <style scoped>
+.warmint_info{
+  font-size: 12px;
+  line-height: 40px;
+  text-align: center;
+}
 #test {
   font-size: 14px;
 }
