@@ -3,7 +3,7 @@
     <van-nav-bar title="激活银行卡" left-arrow @click-left="back" />
     <div class="head_wrap">
       <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
-      <h5 class="title_cardInfo">{{custBankId}} </h5>
+      <h5 class="title_cardInfo">{{custBankId|filterDisplayBankCard}} </h5>
     </div>
 
       <ul class="wrning_txt"  @click="showMoreRuler()">
@@ -79,7 +79,7 @@ export default {
       signChecked: true,
       custTel: "",
       custName: "张三",
-      custBankId: "62170071XXXXXXXX001",
+      custBankId: "6222600260001072444",
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
@@ -88,6 +88,7 @@ export default {
   },
   created() {
     this.initData();
+    this.queryContractInfo();
   },
   computed: {
     verCodeText: function() {
@@ -97,6 +98,11 @@ export default {
     },
     promptInfo(){
         return this.rulerFlag==false?"点击展开":"点击关闭"
+    }
+  },
+  filters:{
+     filterDisplayBankCard(value){
+       return value=value.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
     }
   },
   mounted() {},
@@ -130,13 +136,13 @@ export default {
           "Tpl_Nm": "manbangAct", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
-        this.$http("URL", "P5OIS6Y27", params, true, false)
+        this.$http("/AcctMgt/AcctSvcMB/OurBKSMSSend", "P5OIS6Y27", params, true, false)
           .then(res => {
             console.log("短信获取成功", res);
           })
           .catch(err => {
             console.log("短信获取失败", err);
-            Toast(err.Head.SYS_RESP_DESC);
+            Toast("短信获取失败", err);
           });
       } else {
         Toast("输入的手机号格式错误");
@@ -161,13 +167,13 @@ export default {
          "TrdPCt_AccNo":respFromApp.DbCrd_CardNo,//银行卡号
          "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
         };
-        this.$http("URL", "P5C01Q701", params, true, false)
+        this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq", "P5C01Q701", params, true, false)
           .then(res => {
             console.log("查询合约信息成功", res);
           })
           .catch(err => {
             console.log("查询合约信息失败", err);
-            Toast(err.Head.SYS_RESP_DESC);
+            Toast("查询合约信息失败",err);
         });
     },
     withHold(){
@@ -188,7 +194,7 @@ export default {
           })
           .catch(err => {
             console.log("代扣失败", err);
-            Toast(err.Head.SYS_RESP_DESC);
+            Toast("代扣失败", err);
         });
     },  
     subBtn() {
@@ -209,7 +215,10 @@ export default {
       } else if (_this.smsMes.length < 4 || _this.smsMes.length74) {
         Toast("验证码格式不对，请重新输入");
         return;
-      } else {
+      } else if(!_this.signChecked==true){
+        Toast("协议选项为空,请勾选协议");
+        return;
+      }else {
         let params = {
           "DbCrd_CardNo": respFromApp.DbCrd_CardNo, //借记卡卡号
           "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
@@ -220,13 +229,13 @@ export default {
           "MblPh_No": _this.custTel, //手机号
           "TrckEndToETCphrtxVal":''
         };
-        this.$http("URL", "P5OIS6Y27", params, true, false)
+        this.$http("/AcctMgt/AcctSvcMB/ASMIACCSPreActvt", "P5OIS6Y27", params, true, false)
           .then(res => {
             console.log("激活成功", res);
           })
           .catch(err => {
             console.log("激活失败", err);
-            Toast(err.Head.SYS_RESP_DESC);
+            Toast("激活失败",err);
           });
       }
     }

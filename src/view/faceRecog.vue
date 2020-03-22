@@ -2,6 +2,10 @@
   <div id="face_recog">
     <van-nav-bar title="人脸校验" left-arrow @click-left="back" />
     <p class="warmint_info">拍摄您本人人脸，请确保正对手机，光线充足</p>
+
+    <div class="user_img_head">
+      <img :src="imgUrl">
+    </div>
     <van-button
       size="normal"
       plain
@@ -15,15 +19,19 @@
     color: #000;"
     >采集本人人脸</van-button>
 
-    <div id="test" @click="gotoUrl()">测试跳转路径</div>
+    <div id="test" @click="gotoUrl()" style="color:red;">跳转激活路径</div>
+    <!-- <div id="test" @click="gotoTest()" style="color:red;">跳转测试路径</div> -->
   </div>
 </template>
 
 <script>
 import { Dialog, Toast } from "vant";
+
 export default {
   data() {
-    return {};
+    return {
+      imgUrl:require("../assets/images/info/faceIdent.png")
+    };
   },
   created() {
     // console.log("创建后")
@@ -62,7 +70,10 @@ export default {
     },
 
     back() {
-
+         let dataToFront={};
+         window.WebViewJavascriptBridge.callHandler("invoke",{ "action": "closeWebView","param": dataToFront },function(responseData) {
+           
+          });
     },
     faceRecog() {
       var _this = this;
@@ -87,6 +98,7 @@ export default {
             } else {
               Toast.fail(rspCdDSC + rspInf);
             }
+            console.log("testInfo")
           }
         );
       }
@@ -101,6 +113,9 @@ export default {
         _this.$router.push({ path: "./SdkactivateCon" });
       }
       console.log("ok", str);
+    },
+    gotoTest(){
+      this.$router.push({ path: "./test" });
     }
   }
 };
@@ -109,8 +124,14 @@ export default {
 <style scoped>
 .warmint_info{
   font-size: 12px;
-  line-height: 40px;
+  line-height: 60px;
   text-align: center;
+}
+.user_img_head img{
+  display:block;
+  width:240px;
+  height:240px;
+  margin:70px auto 140px;
 }
 #test {
   font-size: 14px;

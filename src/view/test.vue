@@ -4,6 +4,15 @@
        <input type="text" v-model="custTel">
        <button @click='test()'>这是个按钮1</button>
         <button @click='test1()'>这是个按钮2</button>
+        1: 短信验证的
+        2：发送激活的
+        3：再调查询 -再代扣的
+        4:那一块是什么东西的
+
+        <div @click="quese1()">
+            测试先后的顺序
+        </div>
+
     </div>
 </template>
 <script>
@@ -46,6 +55,7 @@ export default {
         this.custTel ="456";
         xxxx=1;
         console.log(xxxx);
+
     },
     test(){
         xxxx=6+xxxx;
@@ -53,6 +63,12 @@ export default {
     },
     test1(){
         console.log(xxxx);
+    },
+    quese1(){
+        console.log('ooooo');
+    },
+    quese2(){
+
     }
     }
     
