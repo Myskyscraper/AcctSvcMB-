@@ -40,6 +40,10 @@ export default {
       this.initDataGetApp();
     }, 300);
   },
+  beforeRouteLeave(to, from, next) {   
+      to.meta.keepAlive = false; // 从刷脸过去加载页面
+      next();
+  },
   methods: {
     initDataGetApp() {
       var _this = this;

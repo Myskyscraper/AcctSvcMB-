@@ -102,7 +102,13 @@ export default {
   },
   filters:{
      filterDisplayBankCard(value){
-       return value=value.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+       console.log(typeof value);
+       if(value ==undefined){
+         console.log('11111')
+       }else{
+         console.log('9999');
+          return value=value.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+       }
     }
   },
   mounted() {},
@@ -178,6 +184,7 @@ export default {
     },
     withHold(){
       // 代扣协议
+      var _this = this;
        const respFromApp = this.$store.state.initData;
        let params = {
          "ORG_TX_ID":"P5C01Q700",
@@ -188,7 +195,7 @@ export default {
          "SRP_Cst_TpCd":'',//银行卡类型
          "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
         };
-        this.$http("URL", "P5OIS6Y27", params, true, false)
+        _this.$http("ASMIACCSSubstColctnSign", "P5OIS6Y27", params, true, false)
           .then(res => {
             console.log("代扣成功", res);
           })
@@ -359,6 +366,3 @@ padding: 0 25px;
 }
 
 </style>
-
-sdkActivate
-accMngt

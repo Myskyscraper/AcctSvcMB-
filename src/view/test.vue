@@ -13,6 +13,11 @@
             测试先后的顺序
         </div>
 
+        "/LifeSvc/DigtAccWlt/DAWDigtAccSMSVldCDSnd"
+        "/AcctMgt/AcctSvcMB/OurBKSMSSend"  //短信查询
+        "/AcctMgt/AcctSvcMB/ASMIACCSPreActvt" //激活
+        "/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq"//查询合约信息
+
     </div>
 </template>
 <script>

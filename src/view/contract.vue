@@ -34,11 +34,15 @@ export default {
     destoryed(){
         console.log("组件销毁后")
     },
+    beforeRouteLeave(to, from, next) {   
+        // 设置下一个路由的 meta
+        to.meta.keepAlive = true; // 从协议过去不加载页面
+        next();
+    },
     methods:{
         back() {
-        this.$router.go(-1); //返回上一层
-        
-    },
+            this.$router.go(-1); //返回上一层
+        }
     }
     
 }
