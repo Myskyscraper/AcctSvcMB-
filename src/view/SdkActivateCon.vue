@@ -133,7 +133,7 @@ export default {
           "DbCrd_CardNo": initData.DbCrd_CardNo,
           "MblPh_No": _this.custTel,
           "Vld_Cd_Us_Ind": "1", //验证码使用标志
-          "Tpl_Nm": "manbangAct", //模板
+          "Tpl_Nm": "manbangActDmt", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
         this.$http("/AcctMgt/AcctSvcMB/OurBKSMSSend", "P5OIS6Y27", params, true, false)
