@@ -21,6 +21,7 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
             },
             "Data": params
         };
+        //console.log("jsonData",jsonData);
         try {
             window.WebViewJavascriptBridge.callHandler('send', jsonData, function (responseData) {
                 if (loading) {

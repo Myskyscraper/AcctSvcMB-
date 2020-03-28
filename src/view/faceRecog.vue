@@ -119,7 +119,7 @@ export default {
       console.log("ok", str);
     },
     gotoTest(){
-      this.$router.push({ path: "./test" });
+      this.$router.push({ path: "./DKSigning" });
     }
   }
 };

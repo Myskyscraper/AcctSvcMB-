@@ -3,54 +3,56 @@
     <van-nav-bar title="激活银行卡" left-arrow @click-left="back" />
     <div class="head_wrap">
       <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
-      <h5 class="title_cardInfo">{{custBankId|filterDisplayBankCard}} </h5>
+      <h5 class="title_cardInfo">{{custBankId|filterDisplayBankCard}}</h5>
     </div>
 
-      <ul class="wrning_txt"  @click="showMoreRuler()">
-        <li>1.预激活完成后，向该账户存款转账不限制，付款功能仅支持在货车帮及运满满APP平台发生相关业务；</li>
-        <li>2.我行将邮寄银行卡，请注意查收。请收到银行卡后携带身份证、银行卡到就近建设银行网点激活即可享受卡片优惠。</li>
-        <div v-show="rulerFlag">
-          <li>3：本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
-          <li>4：按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
-        </div>
-         <p class="contr_tap">{{promptInfo}}</p>
-      </ul>
+    <ul class="wrning_txt" @click="showMoreRuler()">
+      <li>1.预激活完成后，向该账户存款转账不限制，付款功能仅支持在货车帮及运满满APP平台发生相关业务；</li>
+      <li>2.我行将邮寄银行卡，请注意查收。请收到银行卡后携带身份证、银行卡到就近建设银行网点激活即可享受卡片优惠。</li>
+      <div v-show="rulerFlag">
+        <li>3：本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
+        <li>4：按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
+      </div>
+      <p class="contr_tap">{{promptInfo}}</p>
+    </ul>
 
-       <div style="height:15px;"></div>
-       <p class="warning strong">您还可以办理以下自动业务</p>
-      <div class="inp-content">
-        <div class="checkbox-wrap">
-          <div class="spc contrc_wrap">
-            <van-checkbox v-model="signChecked"></van-checkbox>
-            <span class="contrc-right">&nbsp;签约贷款自动代扣还款服务</span>
-          </div>
+    <div style="height:15px;"></div>
+    <p class="warning strong">您还可以办理以下自动业务</p>
+    <div class="inp-content">
+      <div class="checkbox-wrap">
+        <div class="spc contrc_wrap">
+          <van-checkbox v-model="signChecked"></van-checkbox>
+          <span class="contrc-right">&nbsp;签约贷款自动代扣还款服务</span>
         </div>
       </div>
+    </div>
 
-      <div style="height:28px;"></div>
-      <!-- 手机和短信 -->
-      <div class="inp-content">
-        <div class="checkbox-wrap">
-          <van-cell-group>
-            <van-field v-model="custTel" placeholder="联系电话" type="tel"/>
-          </van-cell-group>
+    <div style="height:28px;"></div>
+    <!-- 手机和短信 -->
+    <div class="inp-content">
+      <div class="checkbox-wrap">
+        <van-cell-group>
+          <van-field v-model="custTel" placeholder="联系电话" type="tel" />
+        </van-cell-group>
 
-          <van-row>
-            <van-col span="18">
-              <van-field v-model="smsMes"   />
-            </van-col>
-            <van-col span="6" class="mesBtn">
-              <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
-            </van-col>
-          </van-row>
-        </div>
+        <van-row>
+          <van-col span="18">
+            <van-field v-model="smsMes" />
+          </van-col>
+          <van-col span="6" class="mesBtn">
+            <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
+          </van-col>
+        </van-row>
       </div>
-
+    </div>
 
     <div class="contrc_wrap_smlall">
-         <van-checkbox v-model="signChecked"></van-checkbox>
-         <span style="width:10px;"></span>
-         <span>&nbsp;我已阅读并同意:<router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link></span>
+      <van-checkbox v-model="signChecked"></van-checkbox>
+      <span style="width:10px;"></span>
+      <span>
+        &nbsp;我已阅读并同意:
+        <router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link>
+      </span>
     </div>
 
     <van-button
@@ -72,6 +74,7 @@
 
 <script>
 import { Dialog, Toast } from "vant";
+let queryObj = {};//查询信息的值
 export default {
   data() {
     return {
@@ -92,23 +95,21 @@ export default {
   },
   computed: {
     verCodeText: function() {
-      return this.timeNum > 59
-        ? "重新发送"
-        : "(" + this.timeNum + ")s";
+      return this.timeNum > 59 ? "重新发送" : "(" + this.timeNum + ")s";
     },
-    promptInfo(){
-        return this.rulerFlag==false?"点击展开":"点击关闭"
+    promptInfo() {
+      return this.rulerFlag == false ? "点击展开" : "点击关闭";
     }
   },
-  filters:{
-     filterDisplayBankCard(value){
-       console.log(typeof value);
-       if(value ==undefined){
-         console.log('11111')
-       }else{
-         console.log('9999');
-          return value=value.replace(/\s/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
-       }
+  filters: {
+    filterDisplayBankCard(value) {
+      if (value == undefined) {
+        console.log("11111");
+      } else {
+        return (value = value
+          .replace(/\s/g, "")
+          .replace(/(\d{4})(?=\d)/g, "$1 "));
+      }
     }
   },
   mounted() {},
@@ -120,7 +121,6 @@ export default {
       this.rulerFlag = !this.rulerFlag;
     },
     initData() {
-      var _this = this;
       const respFromApp = this.$store.state.initData;
       this.custName = respFromApp.CrdHldr_Nm;
       this.custBankId = respFromApp.DbCrd_CardNo;
@@ -142,7 +142,13 @@ export default {
           "Tpl_Nm": "manbangActDmt", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
-        this.$http("/AcctMgt/AcctSvcMB/OurBKSMSSend", "P5OIS6Y27", params, true, false)
+        _this.$http(
+          "/AcctMgt/AcctSvcMB/OurBKSMSSend",
+          "P5OIS6Y27",
+          params,
+          true,
+          false
+        )
           .then(res => {
             console.log("短信获取成功", res);
           })
@@ -164,46 +170,54 @@ export default {
         this.timeNum = 60;
       }
     },
-    queryContractInfo(){
-       const respFromApp = this.$store.state.initData;
-       let params = {
-         "ORG_TX_ID":"P5C01Q701",
-         "TrdPCt_Crdt_TpCd":'1010',
-         "Cst_Nm":respFromApp.CrdHldr_Nm,//姓名
-         "TrdPCt_AccNo":respFromApp.DbCrd_CardNo,//银行卡号
-         "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
-        };
-        this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq", "P5C01Q701", params, true, false)
-          .then(res => {
-            console.log("查询合约信息成功", res);
-          })
-          .catch(err => {
-            console.log("查询合约信息失败", err);
-            Toast("查询合约信息失败",err);
+    queryContractInfo() {
+      var _this = this;
+      const respFromApp = this.$store.state.initData;
+      let params = {
+        "ORG_TX_ID": "P5C01Q701",
+        "TrdPCt_Crdt_TpCd": "1010",
+        "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
+        "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
+        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
+      };
+      console.log("请求查询合约信息的",params);
+      _this.$http(
+        "/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq",
+        "P5C01Q701",
+        params,
+        true,
+        false
+      ).then(res => {
+          console.log("查询合约信息成功", res);
+          queryObj = res;
+        })
+        .catch(err => {
+          console.log("查询合约信息失败", err);
+          Toast("查询合约信息失败", err);
         });
     },
-    withHold(){
+    withHold() {
       // 代扣协议
       var _this = this;
-       const respFromApp = this.$store.state.initData;
-       let params = {
-         "ORG_TX_ID":"P5C01Q700",
-         "Entrst_Prj_ID":'',//项目编号
-         "TrdPCt_ID_Fst_ID":'',//客户唯一编号
-         "Cst_Nm":respFromApp.CrdHldr_Nm,//姓名
-         "TrdPCt_AccNo":respFromApp.DbCrd_CardNo,//银行卡号
-         "SRP_Cst_TpCd":'',//银行卡类型
-         "TrdPCt_Crdt_No":respFromApp.CrdHldr_Crdt_No//身份证号码
-        };
-        _this.$http("ASMIACCSSubstColctnSign", "P5OIS6Y27", params, true, false)
-          .then(res => {
-            console.log("代扣成功", res);
-          })
-          .catch(err => {
-            console.log("代扣失败", err);
-            Toast("代扣失败", err);
+      const respFromApp = this.$store.state.initData;
+      let params = {
+        "ORG_TX_ID": "P5C01Q700",
+        "Entrst_Prj_ID": queryObj.Data.TrdPCt_ID_Fst_ID, //项目编号
+        "TrdPCt_ID_Fst_ID": queryObj.Data.Entrst_Prj_ID, //客户唯一编号
+        "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
+        "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
+        "SRP_Cst_TpCd": "", //银行卡类型
+        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
+      };
+      _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5OIS6Y27", params, true, false)
+        .then(res => {
+          console.log("代扣成功", res);
+        })
+        .catch(err => {
+          console.log("代扣失败", err);
+          Toast("代扣失败", err);
         });
-    },  
+    },
     subBtn() {
       var _this = this;
       const respFromApp = this.$store.state.initData;
@@ -222,11 +236,15 @@ export default {
       } else if (_this.smsMes.length < 4 || _this.smsMes.length74) {
         Toast("验证码格式不对，请重新输入");
         return;
-      } else if(!_this.signChecked==true){
+      } else if (!_this.signChecked == true) {
         Toast("协议选项为空,请勾选协议");
         return;
-      }else {
+      } else if (false) {//JSON.stringify(queryObj)== '{}'
+        Toast("查询信息为空,请稍后重试");
+        return;
+      } else {
         let params = {
+          "TXN_ITT_CHNL_CGY_CODE":"30310139",
           "DbCrd_CardNo": respFromApp.DbCrd_CardNo, //借记卡卡号
           "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
           "CrdHldr_Crdt_No": respFromApp.CrdHldr_Crdt_No, //持卡人证件号码
@@ -234,15 +252,23 @@ export default {
           "GtCrd_TpCd": "14", //新卡激活
           "SMS_Vld_CD": _this.smsMes, //短信验证码
           "MblPh_No": _this.custTel, //手机号
-          "TrckEndToETCphrtxVal":''
+          "TrckEndToETCphrtxVal": "",
+          "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm
         };
-        this.$http("/AcctMgt/AcctSvcMB/ASMIACCSPreActvt", "P5OIS6Y27", params, true, false)
-          .then(res => {
+        console.log("激活请求信息",params)
+        _this.$http(
+          "/AcctMgt/AcctSvcMB/ASMIACCSPreActvt",
+          "P5OIS6Y36",
+          params,
+          true,
+          false
+        ).then(res => {
             console.log("激活成功", res);
+            //_this.withHold();
           })
           .catch(err => {
             console.log("激活失败", err);
-            Toast("激活失败",err);
+            Toast("激活失败", err);
           });
       }
     }
@@ -286,10 +312,10 @@ export default {
 }
 
 .warning {
- font-family: PingFangSC-Regular;
-font-size: 13px;
-color: #999999;
-padding: 0 25px;
+  font-family: PingFangSC-Regular;
+  font-size: 13px;
+  color: #999999;
+  padding: 0 25px;
 }
 .strong {
   color: black;
@@ -297,11 +323,11 @@ padding: 0 25px;
 }
 
 .wrning_txt {
-    font-family: PingFangSC-Regular;
-    font-size: 12px;
-    color: #999999;
-    line-height: 18px;
-    padding: 10px 25px;
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #999999;
+  line-height: 18px;
+  padding: 10px 25px;
 }
 
 .inp-content {
@@ -335,34 +361,33 @@ padding: 0 25px;
 .contr_tap {
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: #4FA0FB;
+  color: #4fa0fb;
 }
 
 .van-button--yellow {
-    color: #fff;
-    background-color: #FFD338;
-    border: 1px solid  #FFD338;
-    color: #333333;
+  color: #fff;
+  background-color: #ffd338;
+  border: 1px solid #ffd338;
+  color: #333333;
 }
-.van-checkbox__icon .van-icon{
-  border:1px solid #333;
+.van-checkbox__icon .van-icon {
+  border: 1px solid #333;
 }
 
-.contrc_wrap_smlall{
+.contrc_wrap_smlall {
   margin-top: 30px;
-   padding-left: 30px;
-   display: flex;
-   font-size: 12px;
+  padding-left: 30px;
+  display: flex;
+  font-size: 12px;
 }
 
-.van-button--normal{
+.van-button--normal {
   color: #333;
 }
-.van-button__text{
+.van-button__text {
   color: #333;
 }
-.mesBtn{
-  margin-top:9px;
+.mesBtn {
+  margin-top: 9px;
 }
-
 </style>

@@ -4,12 +4,8 @@
        <input type="text" v-model="custTel">
        <button @click='test()'>这是个按钮1</button>
         <button @click='test1()'>这是个按钮2</button>
-        1: 短信验证的
-        2：发送激活的
-        3：再调查询 -再代扣的
-        4:那一块是什么东西的
-
-        <div @click="quese1()">
+    
+        <div @click="quese1(5)">
             测试先后的顺序
         </div>
 
@@ -69,11 +65,17 @@ export default {
     test1(){
         console.log(xxxx);
     },
-    quese1(){
-        console.log('ooooo');
+    quese1(value){
+        return new Promise(function(resolve,rejected){
+            if(value>0){
+                resolve(value);
+            }else{
+                rejected(value);
+            }
+        })
     },
     quese2(){
-
+        console.log('yyyyy');
     }
     }
     
