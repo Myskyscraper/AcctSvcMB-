@@ -40,6 +40,10 @@ export default new Router({
             path: "/test",
             name: 'test',
             component: resolve => require(['@/view/test.vue'], resolve)
+        },{
+            path: "/loadErr",
+            name: 'loadErr',
+            component: resolve => require(['@/view/loadErr.vue'], resolve)
         }
 
     ]

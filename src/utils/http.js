@@ -17,7 +17,7 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
             "Url": url,  //DAWBndgAccRelEnqr
             "Head": {
                 "SYS_TX_CODE": SYS_TX_CODE,
-                "Rqs_Jrnl_No": store.state.Rqs_Jrnl_No
+                "Rqs_Jrnl_No": store.state.rqs_Jrnl_No
             },
             "Data": params
         };
@@ -47,7 +47,7 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
                             path:"/loadErr",
                             query:{
                                 rspCdDsc:rspCdDsc,
-                                rqs_Jrnl_No:store.state.Rqs_Jrnl_No,
+                                rqs_Jrnl_No:store.state.rqs_Jrnl_No,
                                 rspInf:rspInf
                             }
                         })

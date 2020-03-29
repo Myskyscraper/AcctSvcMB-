@@ -261,7 +261,7 @@ export default {
           "P5OIS6Y36",
           params,
           true,
-          false
+          true
         ).then(res => {
             console.log("激活成功", res);
             //_this.withHold();
