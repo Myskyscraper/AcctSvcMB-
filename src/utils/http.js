@@ -29,7 +29,7 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
                 }
                 var rspCdDsc = responseData.Head.Txn_Rsp_Cd_Dsc;
                 var rspInf = responseData.Head.Txn_Rsp_Inf;
-                if (rspInf == 'success') {
+                if (rspInf == 'success'||rspInf=="交易成功") {
                     resolve(responseData)
                 }else if (rspCdDsc == 'XTLP5UNKWN02' || rspCdDsc == 'XTLP5UNKWN04') {
                     //转到超时页面
@@ -37,9 +37,7 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
                         router.push("/TimeOut")
                     }
                     reject(responseData)
-                } else if(rspCdDsc=="YDCTS1001008"||rspCdDsc=="YDCTS1001009"){
-                    reject(responseData)
-                }else{
+                } else{
                     reject(responseData)
                     var rqs_Jrnl_No_info=responseData.Head.Sys_Evt_Trace_Id;
                     if(typeof rqs_Jrnl_No_info == "undefined" || rqs_Jrnl_No_info == null || rqs_Jrnl_No_info == ""){

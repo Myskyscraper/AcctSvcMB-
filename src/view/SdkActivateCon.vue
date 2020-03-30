@@ -91,7 +91,7 @@ export default {
   },
   created() {
     this.initData();
-    this.queryContractInfo();
+    //this.withHoldSign();
   },
   computed: {
     verCodeText: function() {
@@ -175,7 +175,7 @@ export default {
       const respFromApp = this.$store.state.initData;
       let params = {
         "ORG_TX_ID": "P5C01Q701",
-        "Crdt_TpCd": "1010",
+        "Crdt_Tpcd": "1010",
         "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
         "Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
@@ -196,20 +196,19 @@ export default {
           Toast("查询合约信息失败", err);
         });
     },
-    withHold() {
+    withHoldSign() {
       // 代扣协议
       var _this = this;
       const respFromApp = this.$store.state.initData;
       let params = {
         "ORG_TX_ID": "P5C01Q700",
-        "Entrst_Prj_ID": queryObj.Data.TrdPCt_ID_Fst_ID, //项目编号
-        "TrdPCt_ID_Fst_ID": queryObj.Data.Entrst_Prj_ID, //客户唯一编号
-        "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
+        "Entrst_Prj_ID": "520830254", //项目编号
+        "TrdPCt_ID_Fst_ID":respFromApp.DbCrd_CardNo, //客户唯一编号
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
-        "SRP_Cst_TpCd": "", //银行卡类型
-        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
+        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No, //身份证号码
+        "Mdf_Msg_Tp":"0"
       };
-      _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5OIS6Y27", params, true, false)
+      _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5C01Q700", params, true, true)
         .then(res => {
           console.log("代扣成功", res);
         })
@@ -252,7 +251,7 @@ export default {
           "GtCrd_TpCd": "14", //新卡激活
           "SMS_Vld_CD": _this.smsMes, //短信验证码
           "MblPh_No": _this.custTel, //手机号
-          "TrckEndToETCphrtxVal": "BeeFR2RPiYDLsc4UvVs2+sEjl7y0/a/t75q7OFsg9v9hPNDJCgWr03Jd0aWv+Bkz5VB1b86UBz0Ey5dZb4W8e9wuBRFLjKH7GzG2+0QnNSpeg5pL0gmIfCdS1X/180Du",
+          "TrckEndToETCphrtxtVal": "BeeFR2RPiYDLsc4UvVs2+sEjl7y0/a/t75q7OFsg9v9hPNDJCgWr03Jd0aWv+Bkz5VB1b86UBz0Ey5dZb4W8e9wuBRFLjKH7GzG2+0QnNSpeg5pL0gmIfCdS1X/180Du",
           "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm
         };
         console.log("激活请求信息",params)
@@ -264,7 +263,7 @@ export default {
           true
         ).then(res => {
             console.log("激活成功", res);
-            //_this.withHold();
+            _this.withHoldSign();
           })
           .catch(err => {
             console.log("激活失败", err);

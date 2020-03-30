@@ -4,7 +4,7 @@
     <p class="warmint_info">拍摄您本人人脸，请确保正对手机，光线充足</p>
 
     <div class="user_img_head">
-      <img :src="imgUrl">
+      <img :src="imgUrl" />
     </div>
     <van-button
       size="normal"
@@ -30,7 +30,7 @@ import { Dialog, Toast } from "vant";
 export default {
   data() {
     return {
-      imgUrl:require("../assets/images/info/faceIdent.png")
+      imgUrl: require("../assets/images/info/faceIdent.png")
     };
   },
   created() {
@@ -40,9 +40,9 @@ export default {
       this.initDataGetApp();
     }, 300);
   },
-  beforeRouteLeave(to, from, next) {   
-      to.meta.keepAlive = false; // 从刷脸过去加载页面
-      next();
+  beforeRouteLeave(to, from, next) {
+    to.meta.keepAlive = false; // 从刷脸过去加载页面
+    next();
   },
   methods: {
     initDataGetApp() {
@@ -74,10 +74,12 @@ export default {
     },
 
     back() {
-         let dataToFront={};
-         window.WebViewJavascriptBridge.callHandler("invoke",{ "action": "closeWebView","param": dataToFront },function(responseData) {
-           
-          });
+      let dataToFront = {};
+      window.WebViewJavascriptBridge.callHandler(
+        "invoke",
+        { action: "closeWebView", param: dataToFront },
+        function(responseData) {}
+      );
     },
     faceRecog() {
       var _this = this;
@@ -87,22 +89,35 @@ export default {
         Toast("正在请求数据，请稍后再试");
         return;
       } else {
-        var dataToSDK = {"Cst_Nm": respFromApp.CrdHldr_Nm,"Crdt_No": respFromApp.CrdHldr_Crdt_No,"phone": respFromApp.mblphNo};
+        var dataToSDK = {
+          Cst_Nm: respFromApp.CrdHldr_Nm,
+          Crdt_No: respFromApp.CrdHldr_Crdt_No,
+          phone: respFromApp.mblphNo
+        };
         console.log("dataToSDK", dataToSDK);
-        window.WebViewJavascriptBridge.callHandler("invoke",{ "action": "faceIdentify","param": dataToSDK },function(responseData) {
+        window.WebViewJavascriptBridge.callHandler(
+          "invoke",
+          { action: "faceIdentify", param: dataToSDK },
+          function(responseData) {
             console.log("刷脸返回的信息", responseData);
             let rspCdDSC = responseData.Head.Txn_Rsp_Cd_Dsc;
             let rspInf = responseData.Head.Txn_Rsp_Inf;
             if (responseData.Data.Cmp_Rslt_Ind == "SUCCESS") {
-              if (url == "accMngt") {
-                _this.$router.push({ path: "./AccMngtCon" });
-              } else {
-                _this.$router.push({ path: "./SdkActivateCon" });
-              }
+              Dialog.alert({
+                title: "提示",
+                message: "验证成功"
+              }).then(() => {
+                console.log("ok");
+                if (url == "accMngt") {
+                  _this.$router.push({ path: "./AccMngtCon" });
+                } else {
+                  _this.$router.push({ path: "./SdkActivateCon" });
+                }
+              });
             } else {
               Toast.fail(rspCdDSC + rspInf);
+              return;
             }
-            console.log("testInfo")
           }
         );
       }
@@ -118,7 +133,7 @@ export default {
       }
       console.log("ok", str);
     },
-    gotoTest(){
+    gotoTest() {
       this.$router.push({ path: "./DKSigning" });
     }
   }
@@ -126,16 +141,16 @@ export default {
 </script>
 
 <style scoped>
-.warmint_info{
+.warmint_info {
   font-size: 12px;
   line-height: 60px;
   text-align: center;
 }
-.user_img_head img{
-  display:block;
-  width:240px;
-  height:240px;
-  margin:70px auto 140px;
+.user_img_head img {
+  display: block;
+  width: 240px;
+  height: 240px;
+  margin: 70px auto 140px;
 }
 #test {
   font-size: 14px;
