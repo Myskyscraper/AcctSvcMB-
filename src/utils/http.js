@@ -34,20 +34,24 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
                 }else if (rspCdDsc == 'XTLP5UNKWN02' || rspCdDsc == 'XTLP5UNKWN04') {
                     //转到超时页面
                     if (goToUrl) {
-                        router.push("/timeOut")
+                        router.push("/TimeOut")
                     }
                     reject(responseData)
                 } else if(rspCdDsc=="YDCTS1001008"||rspCdDsc=="YDCTS1001009"){
                     reject(responseData)
                 }else{
                     reject(responseData)
+                    var rqs_Jrnl_No_info=responseData.Head.Sys_Evt_Trace_Id;
+                    if(typeof rqs_Jrnl_No_info == "undefined" || rqs_Jrnl_No_info == null || rqs_Jrnl_No_info == ""){
+                        rqs_Jrnl_No_info =store.state.rqs_Jrnl_No;
+                    }
                     //转到错误页面
                     if (goToUrl) {
                         router.push({
-                            path:"/loadErr",
+                            path:"/LoadErr",
                             query:{
                                 rspCdDsc:rspCdDsc,
-                                rqs_Jrnl_No:store.state.rqs_Jrnl_No,
+                                rqs_Jrnl_No:rqs_Jrnl_No_info,
                                 rspInf:rspInf
                             }
                         })

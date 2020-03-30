@@ -49,7 +49,7 @@
     <div class="contrc_wrap_smlall">
       <van-checkbox v-model="signChecked"></van-checkbox>
       <span style="width:10px;"></span>
-      <span>
+      <span style="padding-right:40px;">
         &nbsp;我已阅读并同意:
         <router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link>
       </span>
@@ -175,10 +175,10 @@ export default {
       const respFromApp = this.$store.state.initData;
       let params = {
         "ORG_TX_ID": "P5C01Q701",
-        "TrdPCt_Crdt_TpCd": "1010",
+        "Crdt_TpCd": "1010",
         "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
-        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
+        "Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
       };
       console.log("请求查询合约信息的",params);
       _this.$http(
@@ -252,7 +252,7 @@ export default {
           "GtCrd_TpCd": "14", //新卡激活
           "SMS_Vld_CD": _this.smsMes, //短信验证码
           "MblPh_No": _this.custTel, //手机号
-          "TrckEndToETCphrtxVal": "",
+          "TrckEndToETCphrtxVal": "BeeFR2RPiYDLsc4UvVs2+sEjl7y0/a/t75q7OFsg9v9hPNDJCgWr03Jd0aWv+Bkz5VB1b86UBz0Ey5dZb4W8e9wuBRFLjKH7GzG2+0QnNSpeg5pL0gmIfCdS1X/180Du",
           "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm
         };
         console.log("激活请求信息",params)

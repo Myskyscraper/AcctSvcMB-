@@ -41,9 +41,17 @@ export default new Router({
             name: 'test',
             component: resolve => require(['@/view/test.vue'], resolve)
         },{
-            path: "/loadErr",
-            name: 'loadErr',
-            component: resolve => require(['@/view/loadErr.vue'], resolve)
+            path: "/LoadErr",
+            name: 'LoadErr',
+            component: resolve => require(['@/view/LoadErr.vue'], resolve)
+        },{
+            path: "/TimeOut",
+            name: 'TimeOut',
+            component: resolve => require(['@/view/TimeOut.vue'], resolve)
+        },{
+            path: "/Success",
+            name: 'Success',
+            component: resolve => require(['@/view/Success.vue'], resolve)
         }
 
     ]
