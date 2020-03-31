@@ -47,7 +47,7 @@
     </div>
 
     <div class="contrc_wrap_smlall">
-      <van-checkbox v-model="signChecked"></van-checkbox>
+      <van-checkbox v-model="signChecked" style="width:25px;"></van-checkbox>
       <span style="width:10px;"></span>
       <span style="padding-right:40px;">
         &nbsp;我已阅读并同意:
