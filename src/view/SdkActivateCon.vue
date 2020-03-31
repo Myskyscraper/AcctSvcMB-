@@ -65,7 +65,7 @@
       class="bottomButton"
       :hairline="true"
       style="background:#FFD338;color:#333;"
-      @click="subBtn"
+      @click="subBtn()"
     >确认提交</van-button>
   </div>
 </template>
@@ -74,7 +74,6 @@
 
 <script>
 import { Dialog, Toast } from "vant";
-let queryObj = {};//查询信息的值
 export default {
   data() {
     return {
@@ -151,6 +150,7 @@ export default {
         )
           .then(res => {
             console.log("短信获取成功", res);
+            Toast("短信发送成功");
           })
           .catch(err => {
             console.log("短信获取失败", err);
@@ -170,32 +170,7 @@ export default {
         this.timeNum = 60;
       }
     },
-    queryContractInfo() {
-      var _this = this;
-      const respFromApp = this.$store.state.initData;
-      let params = {
-        "ORG_TX_ID": "P5C01Q701",
-        "Crdt_Tpcd": "1010",
-        "Cst_Nm": respFromApp.CrdHldr_Nm, //姓名
-        "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
-        "Crdt_No": respFromApp.CrdHldr_Crdt_No //身份证号码
-      };
-      console.log("请求查询合约信息的",params);
-      _this.$http(
-        "/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq",
-        "P5C01Q701",
-        params,
-        true,
-        false
-      ).then(res => {
-          console.log("查询合约信息成功", res);
-          queryObj = res;
-        })
-        .catch(err => {
-          console.log("查询合约信息失败", err);
-          Toast("查询合约信息失败", err);
-        });
-    },
+  
     withHoldSign() {
       // 代扣协议
       var _this = this;
@@ -211,6 +186,7 @@ export default {
       _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5C01Q700", params, true, true)
         .then(res => {
           console.log("代扣成功", res);
+          _this.$router.push({ path: "./Success"});
         })
         .catch(err => {
           console.log("代扣失败", err);
@@ -237,9 +213,6 @@ export default {
         return;
       } else if (!_this.signChecked == true) {
         Toast("协议选项为空,请勾选协议");
-        return;
-      } else if (false) {//JSON.stringify(queryObj)== '{}'
-        Toast("查询信息为空,请稍后重试");
         return;
       } else {
         let params = {

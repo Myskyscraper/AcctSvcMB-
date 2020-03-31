@@ -20,21 +20,10 @@
     >采集本人人脸</van-button>
 
 
-     <van-button
-      size="normal"
-      plain
-      round
-      margin="10px"
-      type="number"
-      class="bottomButton"
-      :hairline="true"
-      @click="faceRecogTest()"
-      style="background: rgb(255, 211, 56);
-    color: #000;"
-    >测试带参数人脸</van-button>
-
-    <div id="test" @click="gotoUrl()" style="color:red;">跳转激活路径</div>
-    <!-- <div id="test" @click="gotoTest()" style="color:red;">跳转测试路径</div> -->
+    <div style="color:red;text-align:center;font-size:12px;margin-top:10px;" @click="gotoUrl()">
+        测试跳过刷脸到内容页面  
+    </div>
+   
   </div>
 </template>
 
@@ -136,62 +125,16 @@ export default {
         );
       }
     },
-    faceRecogTest(){
-      var _this = this;
-      var url = _this.$route.query.from;
-      const respFromApp = this.$store.state.initData;
-      if (_this.$ccbskObj.isnull(respFromApp)) {
-        Toast("正在请求数据，请稍后再试");
-        return;
-      } else {
-        var dataToSDK = {
-          "Cst_Nm": respFromApp.CrdHldr_Nm,
-          "Crdt_No": respFromApp.CrdHldr_Crdt_No,
-          "phone": respFromApp.mblphNo,
-          "commAuthFields":"DigtAcc"
-        };
-        console.log("dataToSDK1", dataToSDK);
-        window.WebViewJavascriptBridge.callHandler(
-          "invoke",
-          { action: "faceIdentify", param: dataToSDK },
-          function(responseData) {
-            console.log("刷脸返回的信息1", responseData);
-            let rspCdDSC = responseData.Head.Txn_Rsp_Cd_Dsc;
-            let rspInf = responseData.Head.Txn_Rsp_Inf;
-            if (responseData.Data.Cmp_Rslt_Ind == "SUCCESS") {
-              Dialog.alert({
-                title: "提示",
-                message: "验证成功"
-              }).then(() => {
-                console.log("ok");
-                if (url == "accMngt") {
-                  _this.$router.push({ path: "./AccMngtCon" });
-                } else {
-                  _this.$router.push({ path: "./SdkActivateCon" });
-                }
-              });
-            } else {
-              Toast.fail(rspCdDSC + rspInf);
-              return;
-            }
-          }
-        );
-      }
-
-    },
+    
     gotoUrl() {
       var _this = this;
       var str = _this.$route.query.from;
-
       if (str == "accMngt") {
         _this.$router.push({ path: "./AccMngtCon" });
       } else {
         _this.$router.push({ path: "./SdkactivateCon" });
       }
       console.log("ok", str);
-    },
-    gotoTest() {
-      this.$router.push({ path: "./DKSigning" });
     }
   }
 };

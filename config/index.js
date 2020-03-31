@@ -46,7 +46,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     // assetsPublicPath: '/home/ap/web/app/dev/vue_digtacc/',
-    assetsPublicPath: '/app/sh/AcctSvcMB/',
+    assetsPublicPath: '/app/dev/AcctSvcMB/',
     /**
      * Source Maps
      */
