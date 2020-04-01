@@ -32,11 +32,23 @@ const http = function (url,SYS_TX_CODE,params,loading,goToUrl) {
                 if (rspInf == 'success'||rspInf=="交易成功") {
                     resolve(responseData)
                 }else if (rspCdDsc == 'XTLP5UNKWN02' || rspCdDsc == 'XTLP5UNKWN04') {
+                    reject(responseData)
+                    var rqs_Jrnl_No_info=responseData.Head.Sys_Evt_Trace_Id;
+                    if(typeof rqs_Jrnl_No_info == "undefined" || rqs_Jrnl_No_info == null || rqs_Jrnl_No_info == ""){
+                        rqs_Jrnl_No_info =store.state.rqs_Jrnl_No;
+                    }
                     //转到超时页面
                     if (goToUrl) {
-                        router.push("/TimeOut")
+                        router.push({
+                            path:"/TimeOut",
+                            query:{
+                                rspCdDsc:rspCdDsc,
+                                rqs_Jrnl_No:rqs_Jrnl_No_info,
+                                rspInf:rspInf
+                            }
+                        })
                     }
-                    reject(responseData)
+                  
                 } else{
                     reject(responseData)
                     var rqs_Jrnl_No_info=responseData.Head.Sys_Evt_Trace_Id;

@@ -111,7 +111,7 @@ export default {
                 message: "验证成功"
               }).then(() => {
                 console.log("ok");
-                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);
+                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);//保存验活密串
                 if (url == "accMngt") {
                   _this.$router.push({ path: "./AccMngtCon" });
                 } else {

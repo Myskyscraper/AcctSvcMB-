@@ -10,6 +10,13 @@
         <div class="distext">
             尊敬的客户，系统超时，请稍后再试
         </div>
+
+         <div class="errcontent">
+            <p>流水号:{{$route.query.rqs_Jrnl_No}}</p>
+            <p>错误描述:{{$route.query.rspInf}}</p>
+            <p>错误码:{{$route.query.rspCdDsc}}</p>
+        </div>
+
     </div>
 </template>
 <script>
@@ -18,7 +25,6 @@ export default {
     name:"",
     data(){
         return {
-                
         }
     },
     components:{},
@@ -44,7 +50,7 @@ export default {
     },
     methods:{
         back(){
-
+            this.$router.go(-1); //返回上一层
         }
     }
     
@@ -69,6 +75,13 @@ export default {
   .distext{
       font-size: .18rem;line-height: 1.4rem;text-align: center;color: #666;
   }
+
+   .errcontent{
+        font-size: .14rem;
+        text-align: center;
+        padding: 0 .2rem;
+        color: #666;line-height: .22rem;
+    }
 </style>
 
 

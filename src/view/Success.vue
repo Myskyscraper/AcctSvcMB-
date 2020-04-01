@@ -2,13 +2,14 @@
     <div id="timeout">
      
         <div class="title">
-            <span @click="closeBtn">返回</span>
+             <i @click="closeBtn">X</i>
+            <span @click="back">返回</span>
         </div>
         <div class="errimg">
             <img src="../assets/images/successico.png" alt="" />
         </div>
         <div class="distext">
-          激活成功
+         尊敬的用户，您已激活成功
         </div>
     </div>
 </template>
@@ -44,7 +45,7 @@ export default {
     },
     methods:{
         back(){
-
+            this.$router.go(-1);
         },
         closeBtn(){
              window.WebViewJavascriptBridge.callHandler('invoke', {"action":"closeWebView"}, function(responseData) {
@@ -59,9 +60,14 @@ export default {
 <style scoped>
   .title{
       color: #1F2533;
-      height: .44rem;
-      border: 1px solid #ebedf0;
+        font-size: .14rem;
+        line-height: .44rem;
+        height: .44rem;
+        border: 1px solid #ebedf0;
   }
+   .title i{
+        float: left;padding: 0 .15rem;
+    }
   .title span{
       font-size: .15rem;line-height: .44rem;margin-right: .1rem; color: #1F2533;float: right;
   }
@@ -69,11 +75,12 @@ export default {
       height: .7rem;position: relative;
   }
   .errimg img{
-      width: 1rem;height: 1rem;position: absolute;
+      width: 1.3rem;height: 1.3rem;position: absolute;
       top: .2rem;right: 0;left: 0;margin: auto;
   }
   .distext{
-      font-size: .18rem;line-height: 1.4rem;text-align: center;color: #666;
+     font-size: .18rem;line-height: 1.4rem;text-align: center;color: #666;
+     margin-top: 30px;
   }
 </style>
 

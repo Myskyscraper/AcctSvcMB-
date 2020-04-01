@@ -101,6 +101,7 @@ export default {
   },
   filters: {
     filterDisplayBankCard(value) {
+      //格式化银行卡号
       if (value == undefined) {
         console.log("11111");
         return value;
@@ -120,6 +121,7 @@ export default {
       this.rulerFlag = !this.rulerFlag;
     },
     initData() {
+      //初始化赋值
       const respFromApp = this.$store.state.initData;
       this.custName = respFromApp.CrdHldr_Nm;
       this.custBankId = respFromApp.DbCrd_CardNo;
@@ -137,10 +139,11 @@ export default {
         let params = {
           "DbCrd_CardNo": initData.DbCrd_CardNo,
           "MblPh_No": _this.custTel,
-          "Vld_Cd_Us_Ind": "1", //验证码使用标志
+          "Vld_CD_Us_Ind": "1", //验证码使用标志
           "Tpl_Nm": "manbangActDmt", //模板
           "TXN_ITT_CHNL_CGY_CODE": "30310139" //
         };
+        console.log("短信请求信息",params)
         _this.$http(
           "/AcctMgt/AcctSvcMB/OurBKSMSSend",
           "P5OIS6Y27",

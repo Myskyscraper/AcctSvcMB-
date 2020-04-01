@@ -35,11 +35,6 @@ export default new Router({
             path: "/Contract",
             name: 'Contract',
             component: resolve => require(['@/view/Contract.vue'], resolve)
-        },
-         {
-            path: "/test",
-            name: 'test',
-            component: resolve => require(['@/view/test.vue'], resolve)
         },{
             path: "/LoadErr",
             name: 'LoadErr',
