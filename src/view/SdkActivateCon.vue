@@ -10,8 +10,8 @@
       <li>1.预激活完成后，向该账户存款转账不限制，付款功能仅支持在货车帮及运满满APP平台发生相关业务；</li>
       <li>2.我行将邮寄银行卡，请注意查收。请收到银行卡后携带身份证、银行卡到就近建设银行网点激活即可享受卡片优惠。</li>
       <div v-show="rulerFlag">
-        <li>3：本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
-        <li>4：按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
+        <li>3.本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
+        <li>4.按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
       </div>
       <p class="contr_tap">{{promptInfo}}</p>
     </ul>
@@ -36,10 +36,10 @@
         </van-cell-group>
 
         <van-row>
-          <van-col span="18">
+          <van-col span="17">
             <van-field v-model="smsMes" />
           </van-col>
-          <van-col span="6" class="mesBtn">
+          <van-col span="7" class="mesBtn">
             <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
           </van-col>
         </van-row>
@@ -80,8 +80,8 @@ export default {
       canFlag: true,
       signChecked: true,
       custTel: "",
-      custName: "张三",
-      custBankId: "6222600260001072444",
+      custName: "",
+      custBankId: "",
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
@@ -90,7 +90,6 @@ export default {
   },
   created() {
     this.initData();
-    //this.withHoldSign();
   },
   computed: {
     verCodeText: function() {
@@ -104,6 +103,7 @@ export default {
     filterDisplayBankCard(value) {
       if (value == undefined) {
         console.log("11111");
+        return value;
       } else {
         return (value = value
           .replace(/\s/g, "")
@@ -211,7 +211,7 @@ export default {
       } else if (_this.$ccbskObj.isnull(_this.smsMes)) {
         Toast("验证码输入为空，请重新输入");
         return;
-      } else if (_this.smsMes.length < 4 || _this.smsMes.length74) {
+      } else if (_this.smsMes.length < 4 || _this.smsMes.length >7){
         Toast("验证码格式不对，请重新输入");
         return;
       } else if (!_this.signChecked == true) {

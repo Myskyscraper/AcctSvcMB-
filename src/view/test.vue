@@ -78,7 +78,7 @@ export default {
       console.log("yyyyy");
     },
     alert() {
-       _this.$store.commit("initDataSave", responseData);
+       //_this.$store.commit("initDataSave", responseData);
       
     }
   }
