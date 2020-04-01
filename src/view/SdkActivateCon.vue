@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     verCodeText: function() {
-      return this.timeNum > 59 ? "重新发送" : "(" + this.timeNum + ")s";
+      return this.timeNum > 59 ? "发送验证码" : "(" + this.timeNum + ")s";
     },
     promptInfo() {
       return this.rulerFlag == false ? "点击展开" : "点击关闭";
@@ -175,13 +175,15 @@ export default {
       // 代扣协议
       var _this = this;
       const respFromApp = this.$store.state.initData;
+      const trckEndToETCphrtxtVal = this.$store.state.trckEndToETCphrtxtVal;
       let params = {
         "ORG_TX_ID": "P5C01Q700",
         "Entrst_Prj_ID": "520830254", //项目编号
         "TrdPCt_ID_Fst_ID":respFromApp.DbCrd_CardNo, //客户唯一编号
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
         "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No, //身份证号码
-        "Mdf_Msg_Tp":"0"
+        "Mdf_Msg_Tp":"0",
+        "PKey_CntDsc":trckEndToETCphrtxtVal//验活密串
       };
       _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5C01Q700", params, true, true)
         .then(res => {
@@ -196,6 +198,7 @@ export default {
     subBtn() {
       var _this = this;
       const respFromApp = this.$store.state.initData;
+      const trckEndToETCphrtxtVal = this.$store.state.trckEndToETCphrtxtVal;
       if (_this.$ccbskObj.isnull(_this.custName)) {
         Toast("姓名不能为空，请重新输入");
         return;
@@ -224,7 +227,7 @@ export default {
           "GtCrd_TpCd": "14", //新卡激活
           "SMS_Vld_CD": _this.smsMes, //短信验证码
           "MblPh_No": _this.custTel, //手机号
-          "TrckEndToETCphrtxtVal": "BeeFR2RPiYDLsc4UvVs2+sEjl7y0/a/t75q7OFsg9v9hPNDJCgWr03Jd0aWv+Bkz5VB1b86UBz0Ey5dZb4W8e9wuBRFLjKH7GzG2+0QnNSpeg5pL0gmIfCdS1X/180Du",
+          "TrckEndToETCphrtxtVal": trckEndToETCphrtxtVal,
           "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm
         };
         console.log("激活请求信息",params)

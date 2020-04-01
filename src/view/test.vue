@@ -19,7 +19,7 @@
 <script>
 // import CityModel from "./CityModel";
 let xxxx = 0;
-import { Dialog } from "vant";
+import { Dialog,Toast } from "vant";
 export default {
   name: "",
   data() {
@@ -78,12 +78,8 @@ export default {
       console.log("yyyyy");
     },
     alert() {
-      Dialog.alert({
-        title: "提示",
-        message: "验证成功"
-      }).then(() => {
-         console.log('ok')
-      });
+       _this.$store.commit("initDataSave", responseData);
+      
     }
   }
 };

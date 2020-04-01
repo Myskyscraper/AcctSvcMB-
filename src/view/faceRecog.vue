@@ -111,6 +111,7 @@ export default {
                 message: "验证成功"
               }).then(() => {
                 console.log("ok");
+                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);
                 if (url == "accMngt") {
                   _this.$router.push({ path: "./AccMngtCon" });
                 } else {
@@ -118,7 +119,7 @@ export default {
                 }
               });
             } else {
-              Toast.fail(rspCdDSC + rspInf);
+              Toast(rspCdDSC + rspInf);
               return;
             }
           }
@@ -150,7 +151,7 @@ export default {
   display: block;
   width: 240px;
   height: 240px;
-  margin: 70px auto 140px;
+  margin: 70px auto 110px;
 }
 #test {
   font-size: 14px;
