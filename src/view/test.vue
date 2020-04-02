@@ -6,20 +6,19 @@
     <button @click="test1()">这是个按钮2</button>
 
     <div @click="quese1(5)">测试先后的顺序</div>
-
-    
 "/LifeSvc/DigtAccWlt/DAWDigtAccSMSVldCDSnd"
     "/AcctMgt/AcctSvcMB/OurBKSMSSend" //短信查询
     "/AcctMgt/AcctSvcMB/ASMIACCSPreActvt" //激活
     "/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnArInq"//查询合约信息
-
     <div @click="alert()">测试弹出提示的框的</div>
+
+    <div @click="gotoError">跳到错误页面的内容</div>
   </div>
 </template>
 <script>
 // import CityModel from "./CityModel";
 let xxxx = 0;
-import { Dialog,Toast } from "vant";
+import { Dialog, Toast } from "vant";
 export default {
   name: "",
   data() {
@@ -78,19 +77,32 @@ export default {
       console.log("yyyyy");
     },
     alert() {
-         Dialog.alert({
-                title: "提示",
-                message: "验证成功"
-              }).then(() => {
-                console.log("ok");
-                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);//保存验活密串
-                if (url == "accMngt") {
-                  _this.$router.push({ path: "./AccMngtCon" });
-                } else {
-                  _this.$router.push({ path: "./SdkActivateCon" });
-                }
-              });
-      
+      Dialog.alert({
+        title: "提示",
+        message: "验证成功"
+      }).then(() => {
+        console.log("ok");
+        _this.$store.commit(
+          "trckEndToETCphrtxtValSave",
+          responseData.Data.Enc_Rslt_Info
+        ); //保存验活密串
+        if (url == "accMngt") {
+          _this.$router.push({ path: "./AccMngtCon" });
+        } else {
+          _this.$router.push({ path: "./SdkActivateCon" });
+        }
+      });
+    },
+    gotoError() {
+      this.$store.commit("activateFlagChange",true)
+      this.$router.push({
+        path: "/LoadErr",
+        query: {
+          rspCdDsc: "XTLP5UNKWN04",
+          rqs_Jrnl_No: " 12222222222222222222222222222",
+          rspInf: " 处理信息不合适"
+        }
+      });
     }
   }
 };

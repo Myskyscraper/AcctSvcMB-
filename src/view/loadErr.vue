@@ -6,9 +6,13 @@
         </div>
         <div class="errmain">
              
-            <div class="errtitle"></div>
-            <img src="../assets/images/failure.png" alt="">
-            <span>加载数据失败</span>
+            <div class="errtitle">
+                <img src="../assets/images/question.png" alt="" v-if="$store.state.activateFlag">
+                <img src="../assets/images/failure.png" alt=""  v-if="!$store.state.activateFlag">
+            </div>
+
+            <p v-if="$store.state.activateFlag" class="success_info">激活成功，代扣签约失败</p>
+            <span v-if="!$store.state.activateFlag">加载数据失败</span>
             <div class="errcontent">
                 <p>流水号:{{$route.query.rqs_Jrnl_No}}</p>
                 <p>错误描述:{{$route.query.rspInf}}</p>
@@ -85,19 +89,27 @@ export default {
         position: relative;
     }
     .errmain .errtitle{
-        height: .9rem;
+        height: 1.4rem;
         /* background: #ffd338; */
     }
     .errmain img{
-        width: 1rem;height: 1rem;position: absolute;top: .4rem;
-        left: 0;right: 0;margin: auto;
+        width: 1rem;height: 1rem;
+        display: block;
+        margin: 30px auto 0;
     }
     .errmain span{
-        color:#666;position: absolute;top: 1.5rem;
-        right: 0;left: 0;margin: auto;font-size: .16rem;text-align: center;
+        color:#666;
+        display: block;
+        font-size: .16rem;
+        text-align: center;
+    }
+    .success_info{
+        font-size: .16rem;
+        text-align: center;
+        color:#666;
     }
     .errcontent{
-        font-size: .14rem;margin-top: 1rem;text-align: center;padding: 0 .2rem;
+        font-size: .14rem;margin-top: 0.2rem;text-align: center;padding: 0 .2rem;
         color: #666;line-height: .22rem;
     }
 

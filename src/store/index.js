@@ -9,7 +9,8 @@ const store = new Vuex.Store({
         loadText:"",//封装的loading图展示的文字
         initData:"",//获取的初始化数据
         rqs_Jrnl_No:"",//生成的第三方流水
-        trckEndToETCphrtxtVal:""//验活密串
+        trckEndToETCphrtxtVal:"",//验活密串
+        activateFlag:false//激活功能是否开启
     },
     mutations: {
         showLoading(state,isLoad) {
@@ -26,6 +27,9 @@ const store = new Vuex.Store({
         },
         trckEndToETCphrtxtValSave(state,val){
             state.trckEndToETCphrtxtVal = val
+        },
+        activateFlagChange(state,val){
+            state.activateFlag=val;
         }
     },
     actions: {}

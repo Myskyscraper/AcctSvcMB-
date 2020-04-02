@@ -140,8 +140,8 @@ export default {
           "DbCrd_CardNo": initData.DbCrd_CardNo,
           "MblPh_No": _this.custTel,
           "Vld_CD_Us_Ind": "1", //验证码使用标志
-          "Tpl_Nm": "manbangActDmt", //模板
-          "TXN_ITT_CHNL_CGY_CODE": "30310139" //
+          "TXN_ITT_CHNL_CGY_CODE": "30310139", //
+          "Tpl_Nm": "manbangActDmt" //模板
         };
         console.log("短信请求信息",params)
         _this.$http(
@@ -242,6 +242,7 @@ export default {
           true
         ).then(res => {
             console.log("激活成功", res);
+            _this.$store.commit("activateFlagChange",true);//激活成功做个标识
             _this.withHoldSign();
           })
           .catch(err => {
