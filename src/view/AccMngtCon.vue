@@ -1,54 +1,59 @@
 <template>
-  <div>
-    <van-nav-bar title="账户升降级管理" left-arrow @click-left="back" />
-    <van-cell-group>
-      <div class="head_wrap">
-        <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
+  <div id="sdkActive">
+    <van-nav-bar title="激活银行卡" left-arrow @click-left="back" />
+    <div class="head_wrap">
+      <p class="title_info">{{custName}}，您将预激活满帮龙卡</p>
+      <h5 class="title_cardInfo">{{custBankId|filterDisplayBankCard}}</h5>
+    </div>
+
+    <ul class="wrning_txt" @click="showMoreRuler()">
+      <li>1.预激活完成后，向该账户存款转账不限制，付款功能仅支持在货车帮及运满满APP平台发生相关业务；</li>
+      <li>2.我行将邮寄银行卡，请注意查收。请收到银行卡后携带身份证、银行卡到就近建设银行网点激活即可享受卡片优惠。</li>
+      <div v-show="rulerFlag">
+        <li>3.本卡不收取卡片年费、账户管理费，跨行ATM取款费、跨行转账费。</li>
+        <li>4.按照人民银行相关要求，该银行卡签收后半年未至网点激活，账户“只收不付”，为了不影响您的使用，请收到卡片后尽快激活。</li>
       </div>
+      <p class="contr_tap">{{promptInfo}}</p>
+    </ul>
 
-      <p class="warning">将满帮龙卡升级为Ⅰ类户</p>
-
-      <ul class="list-content">
-        <li v-for="(item) in bankCardInfo1" :key="item.id" @click="choseBankCard(item)">
-          <span>{{item.id}}</span>
-          <span>{{item.name|filterType}}</span>
-        </li>
-      </ul>
-
-      <p class="warning">将您名下的Ⅰ类户降级为Ⅱ类户</p>
-
-      <ul class="list-content">
-        <li v-for="(item) in bankCardInfo" :key="item.id" @click="choseBankCard(item)">
-          <span>{{item.id}}</span>
-          <span>{{item.name|filterType}}</span>
-        </li>
-      </ul>
-
-      <ul class="warning-txt">
-        <li>1：若账户降级为二类账户，二类账户非绑定卡账户转账，存取现金，消费缴费日累计金额合计一万元，年累计限额合计20万元。</li>
-        <li>2：若有一类账户已绑定二类账户相互转账功能，请先解除绑定关系后再进行账户降级操作。</li>
-        <li>3：若您名下持有并超过5张卡二类账户时，将无法进行账户降级操作。</li>
-      </ul>
-
-      <div style="height:28px;"></div>
-      <!-- 手机和短信 -->
-      <div class="inp-content">
-        <div class="checkbox-wrap">
-          <van-cell-group>
-            <van-field v-model="custTel" placeholder="联系电话" type="tel" />
-          </van-cell-group>
-
-          <van-row>
-            <van-col span="18">
-              <van-field v-model="smsMes" />
-            </van-col>
-            <van-col span="6">
-              <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
-            </van-col>
-          </van-row>
+    <div style="height:15px;"></div>
+    <p class="warning strong">您还可以办理以下自动业务</p>
+    <div class="inp-content">
+      <div class="checkbox-wrap">
+        <div class="spc contrc_wrap">
+          <van-checkbox v-model="signChecked"></van-checkbox>
+          <span class="contrc-right">&nbsp;签约贷款自动代扣还款服务</span>
         </div>
       </div>
-    </van-cell-group>
+    </div>
+
+    <div style="height:28px;"></div>
+    <!-- 手机和短信 -->
+    <div class="inp-content">
+      <div class="checkbox-wrap">
+        <van-cell-group>
+          <van-field v-model="custTel" placeholder="联系电话" type="tel" />
+        </van-cell-group>
+
+        <van-row>
+          <van-col span="17">
+            <van-field v-model="smsMes" />
+          </van-col>
+          <van-col span="7" class="mesBtn">
+            <van-button type="yellow" size="small" @click="verificationRun">{{verCodeText}}</van-button>
+          </van-col>
+        </van-row>
+      </div>
+    </div>
+
+    <div class="contrc_wrap_smlall">
+      <van-checkbox v-model="signChecked" style="width:25px;"></van-checkbox>
+      <span style="width:10px;"></span>
+      <span style="padding-right:40px;">
+        &nbsp;我已阅读并同意:
+        <router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link>
+      </span>
+    </div>
 
     <van-button
       size="normal"
@@ -58,14 +63,13 @@
       color="#FFD338"
       type="number"
       class="bottomButton"
-      style="background: rgb(255, 211, 56);
-    color: rgb(255, 211, 56);
-    border-color: rgb(255, 211, 56);"
       :hairline="true"
-      @click="nextStep"
+      style="background:#FFD338;color:#333;"
+      @click="subBtn()"
     >确认提交</van-button>
   </div>
 </template>
+
 
 
 <script>
@@ -74,43 +78,37 @@ export default {
   data() {
     return {
       canFlag: true,
-      bank_account: "",
+      signChecked: true,
       custTel: "",
-      custName: "张三",
+      custName: "",
       custBankId: "",
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
-      bankCardInfo1: [{ id: "12345678900", name: "zs1" }],
-      bankCardInfo: [
-        { id: "12345678901", name: "zs1" },
-        { id:"12345678902", name: "zs2" },
-        { id: "12345678903", name: "zs3" },
-        { id:"12345678904", name: "zs4" },
-        { id: "12345678905", name: "zs5" },
-        { id: "12345678906", name: "zs6" }
-      ],
-      typeOneAccoInfo: [],
-      typeTwoAccoInfo: [],
-      typeThreeAccoInfo: []
+      rulerFlag: false //展示更多
     };
   },
   created() {
-    //this.initData();
+    this.initData();
   },
   computed: {
     verCodeText: function() {
-      return this.timeNum > 59
-        ? "重新发送"
-        : "(" + this.timeNum + ")s";
+      return this.timeNum > 59 ? "发送验证码" : "(" + this.timeNum + ")s";
+    },
+    promptInfo() {
+      return this.rulerFlag == false ? "点击展开" : "点击关闭";
     }
   },
   filters: {
-    filterType(value) {
-      if (value == "0") {
-        return "存折";
+    filterDisplayBankCard(value) {
+      //格式化银行卡号
+      if (value == undefined) {
+        console.log("11111");
+        return value;
       } else {
-        return "银行卡";
+        return (value = value
+          .replace(/\s/g, "")
+          .replace(/(\d{4})(?=\d)/g, "$1 "));
       }
     }
   },
@@ -119,69 +117,15 @@ export default {
     back() {
       this.$router.go(-1); //返回上一层
     },
-    initDataGetApp() {
-      var _this = this;
-      this.$ccbskObj.setupWebViewJavascriptBridge(function(bridge) {
-        bridge.callHandler(
-          "invoke",
-          {
-            action: "userData"
-          },
-          function(responseData) {
-            console.log("responseData", responseData);
-            _this.$store.commit("initDataSave", responseData);
-            if (_this.$ccbskObj.isnull(responseData.Rqs_Jrnl_No)) {
-              _this.$store.commit(
-                "rqs_Jrnl_No_Change",
-                _this.$ccbskObj.generateRqsJrnlNo()
-              );
-            } else {
-              _this.$store.commit(
-                "rqs_Jrnl_No_Change",
-                responseData.Rqs_Jrnl_No
-              );
-            }
-            //_this.initData(responseData);
-          }
-        );
-      });
+    showMoreRuler() {
+      this.rulerFlag = !this.rulerFlag;
     },
     initData() {
-      var _this = this;
+      //初始化赋值
       const respFromApp = this.$store.state.initData;
-      let params = {
-        "Id_Crdt_Tpcd": "1010", //识别证件类型代码
-        "Id_Crdt_No": respFromApp.Id_Crdt_No, //证件号码
-        "Id_IdvLgl_Nm": respFromApp.Id_IdvLgl_Nm, //法定名称
-        "Setl_Acc_CLCd": "A", //
-        "TrdPt_Sign_Agrm_ID": respFromApp.Prtn_Chnl_ID, //第三方签约编号
-        "TXN_ITT_CHNL_CGY_CODE": "30310139",
-        "intf_ECD": "01"
-      };
-      this.$http("URL", "P5OIS6Y05", params, true, false)
-        .then(res => {
-          console.log("查询银行卡信息", res);
-          let Enqr_Rslt = res.Data.Enqr_Rslt; //返回查询结果
-          if (Enqr_Rslt == "0") {
-            Toast("无此客户");
-            return;
-          } else if (Enqr_Rslt == "1") {
-            Toast("尊敬的客户，您没有该类账户");
-            return;
-          } else {
-            _this.bankCardInfo = res.Data.ACCOUNT_GROUP;
-            let accountInfo = res.Data.ACCOUNT_GROUP;
-            accountInfo.forEach((item, index) => {
-              if (item.PD_Sign_Ind == "A") {
-                _this.typeOneAccoInfo.push(item);
-              }
-            });
-          }
-        })
-        .catch(err => {
-          console.log("查询银行卡信息", err);
-          Toast(err.Head.SYS_RESP_DESC);
-        });
+      this.custName = respFromApp.CrdHldr_Nm;
+      this.custBankId = respFromApp.DbCrd_CardNo;
+      this.custTel = respFromApp.mblphNo;
     },
     verificationRun() {
       var _this = this;
@@ -193,19 +137,28 @@ export default {
         }
         this.verificationNum();
         let params = {
-          "DbCrd_CardNo": initData,//银行卡卡号
+          "DbCrd_CardNo": initData.DbCrd_CardNo,
           "MblPh_No": _this.custTel,
-          "Vld_Cd_Us_Ind": "1", //验证码使用标志
+          "Vld_CD_Us_Ind": "1", //验证码使用标志
           "Tpl_Nm": "manbangActDmt", //模板
-          "TXN_ITT_CHNL_CGY_CODE": "30310139" //
+          "TXN_ITT_CHNL_CGY_CODE": "30310139", //
+          "TXN_INSID":"520423600"
         };
-        this.$http("URL", "P5OIS6Y27", params, true, false)
+        console.log("短信请求信息",params)
+        _this.$http(
+          "/AcctMgt/AcctSvcMB/OurBKSMSSend",
+          "P5OIS6Y27",
+          params,
+          true,
+          false
+        )
           .then(res => {
             console.log("短信获取成功", res);
+            Toast("短信发送成功");
           })
           .catch(err => {
             console.log("短信获取失败", err);
-            Toast(err.Head.SYS_RESP_DESC);
+            Toast("短信获取失败", err);
           });
       } else {
         Toast("输入的手机号格式错误");
@@ -221,13 +174,35 @@ export default {
         this.timeNum = 60;
       }
     },
-    choseBankCard(val) {
-      console.log(val);
-      this.bank_account = val.SrcSys_AR_ID;
-    },
-    nextStep() {
+  
+    withHoldSign() {
+      // 代扣协议
       var _this = this;
       const respFromApp = this.$store.state.initData;
+      const trckEndToETCphrtxtVal = this.$store.state.trckEndToETCphrtxtVal;
+      let params = {
+        "ORG_TX_ID": "P5C01Q700",
+        "Entrst_Prj_ID": "520830254", //项目编号
+        "TrdPCt_ID_Fst_ID":respFromApp.DbCrd_CardNo, //客户唯一编号
+        "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
+        "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No, //身份证号码
+        "Mdf_Msg_Tp":"0",
+        "PKey_CntDsc":trckEndToETCphrtxtVal//验活密串
+      };
+      _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5C01Q700", params, true, true)
+        .then(res => {
+          console.log("代扣成功", res);
+          _this.$router.push({ path: "./Success"});
+        })
+        .catch(err => {
+          console.log("代扣失败", err);
+          Toast("代扣失败", err);
+        });
+    },
+    subBtn() {
+      var _this = this;
+      const respFromApp = this.$store.state.initData;
+      const trckEndToETCphrtxtVal = this.$store.state.trckEndToETCphrtxtVal;
       if (_this.$ccbskObj.isnull(_this.custName)) {
         Toast("姓名不能为空，请重新输入");
         return;
@@ -235,25 +210,45 @@ export default {
         Toast("银行卡格式不正确，请重新输入");
         return;
       } else if (!_this.custTel.length == 11) {
-        Toast("银行卡格式不正确，请重新输入");
+        Toast("手机格式不正确，请重新输入");
         return;
       } else if (_this.$ccbskObj.isnull(_this.smsMes)) {
         Toast("验证码输入为空，请重新输入");
         return;
+      } else if (_this.smsMes.length < 4 || _this.smsMes.length >7){
+        Toast("验证码格式不对，请重新输入");
+        return;
+      } else if (!_this.signChecked == true) {
+        Toast("协议选项为空,请勾选协议");
+        return;
       } else {
         let params = {
-          "DbCrd_CardNo": bank_account,
-          "Setl_Acc_CLCd": "B",
-          "SMS_Vld_CD": _this.smsMes,
-          "MblPh_No": _this.custTel
+          "TXN_ITT_CHNL_CGY_CODE":"30310139",
+          "DbCrd_CardNo": respFromApp.DbCrd_CardNo, //借记卡卡号
+          "CrdHldr_Crdt_TpCd": "1010", //持卡人证件类型代码
+          "CrdHldr_Crdt_No": respFromApp.CrdHldr_Crdt_No, //持卡人证件号码
+          "CrdHldr_Nm": respFromApp.CrdHldr_Nm, //持卡人证件姓名
+          "GtCrd_TpCd": "14", //新卡激活
+          "SMS_Vld_CD": _this.smsMes, //短信验证码
+          "MblPh_No": _this.custTel, //手机号
+          "TrckEndToETCphrtxtVal":"BeeFR2RPiYDLsc4UvVs2+sEjl7y0/a/t75q7OFsg9v9hPNDJCgWr03Jd0aWv+Bkz5VB1b86UBz0Ey5dZb4W8e9wuBRFLjKH7GzG2+0QnNSpeg5pL0gmIfCdS1X/180Du",
+          "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm,
+          "TXN_INSID":"520423600"
         };
-        this.$http("URL", "P5OIS6Y37", params, true, false)
-          .then(res => {
-            console.log("升降级成功", res);
+        console.log("激活请求信息",params)
+        _this.$http(
+          "/AcctMgt/AcctSvcMB/ASMIACCSPreActvt",
+          "P5OIS6Y36",
+          params,
+          true,
+          true
+        ).then(res => {
+            console.log("激活成功", res);
+            _this.withHoldSign();
           })
           .catch(err => {
-            console.log("升降级失败", err);
-            // Toast(err.Head.SYS_RESP_DESC);
+            console.log("激活失败", err);
+            Toast("激活失败", err);
           });
       }
     }
@@ -262,6 +257,25 @@ export default {
 </script>
 
 <style scoped>
+#sdkActive {
+  font-size: 14px;
+}
+.head_wrap {
+  padding-top: 15px;
+  font-family: PingFangSC-Medium;
+  font-size: 18px;
+  color: #1f2533;
+  text-align: center;
+}
+.title_info {
+  margin-bottom: 5px;
+}
+.title_cardInfo {
+  font-size: 18px;
+  color: #1f2533;
+  text-align: center;
+}
+
 .bank-wrap-box {
   height: 44px;
   display: flex;
@@ -278,13 +292,22 @@ export default {
 }
 
 .warning {
-  margin-top: 10px;
   font-family: PingFangSC-Regular;
-  font-size: 14px;
-  color: #333333;
+  font-size: 13px;
+  color: #999999;
+  padding: 0 25px;
 }
 .strong {
   color: black;
+  margin: 5px 0;
+}
+
+.wrning_txt {
+  font-family: PingFangSC-Regular;
+  font-size: 12px;
+  color: #999999;
+  line-height: 18px;
+  padding: 10px 25px;
 }
 
 .inp-content {
@@ -300,60 +323,14 @@ export default {
   padding: 10px 0;
 }
 
-.warning-list {
-  height: 30px;
-  font-size: 14px;
-  padding-left: 30px;
-  line-height: 30px;
-}
-
-.warning-list span {
-  display: block;
-  float: left;
-  width: 33%;
-  text-align: center;
-}
-
-.list-content {
-}
-
-.list-content li {
-  color: #333;
-  font-size: 12px;
-  line-height: 20px;
-  height: 20px;
-  padding-left: 30px;
-}
-
-.list-content li span {
-  display: block;
-  float: left;
-  width: 33%;
-  text-align: center;
-}
-
-.list-content li span:nth-child(1) {
-  text-align: left;
-  width: 50%;
-  box-sizing: border-box;
-  padding-left: 0px;
-}
-
-.list-content li span:nth-child(2) {
-  width: 50%;
-  box-sizing: border-box;
-  padding-left: 0px;
-}
-
-.van-cell {
-  padding: 10px 0;
-}
-
 .contrc_wrap {
   display: flex;
 }
 
 .contrc_wrap span {
+  font-family: PingFangSC-Regular;
+  font-size: 15px;
+  color: #333333;
   line-height: 30px;
 }
 
@@ -362,25 +339,9 @@ export default {
 }
 
 .contr_tap {
-  text-align: center;
-  color: red;
-  font-size: 16px;
-}
-
-.head_wrap {
-  padding-top: 15px;
-  font-family: PingFangSC-Medium;
-  font-size: 18px;
-  color: #1f2533;
-  text-align: center;
-}
-
-.warning-txt {
   font-family: PingFangSC-Regular;
   font-size: 12px;
-  color: #999999;
-  line-height: 18px;
-  padding: 10px 10px;
+  color: #4fa0fb;
 }
 
 .van-button--yellow {
@@ -405,5 +366,8 @@ export default {
 }
 .van-button__text {
   color: #333;
+}
+.mesBtn {
+  margin-top: 9px;
 }
 </style>

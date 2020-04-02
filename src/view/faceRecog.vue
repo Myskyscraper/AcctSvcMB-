@@ -19,11 +19,10 @@
     color: #000;"
     >采集本人人脸</van-button>
 
-
-    <div style="color:red;text-align:center;font-size:12px;margin-top:10px;" @click="gotoUrl()">
-        测试跳过刷脸到内容页面  
-    </div>
-   
+    <div
+      style="color:red;text-align:center;font-size:12px;margin-top:10px;"
+      @click="gotoUrl()"
+    >测试跳过刷脸到内容页面</div>
   </div>
 </template>
 
@@ -70,7 +69,7 @@ export default {
                 responseData.Rqs_Jrnl_No
               );
             }
-            //_this.initData(responseData);
+            _this.directFaceRecog(responseData);
           }
         );
       });
@@ -93,9 +92,9 @@ export default {
         return;
       } else {
         var dataToSDK = {
-          "Cst_Nm": respFromApp.CrdHldr_Nm,
-          "Crdt_No": respFromApp.CrdHldr_Crdt_No,
-          "phone": respFromApp.mblphNo
+          Cst_Nm: respFromApp.CrdHldr_Nm,
+          Crdt_No: respFromApp.CrdHldr_Crdt_No,
+          phone: respFromApp.mblphNo
         };
         console.log("dataToSDK", dataToSDK);
         window.WebViewJavascriptBridge.callHandler(
@@ -111,7 +110,10 @@ export default {
                 message: "验证成功"
               }).then(() => {
                 console.log("ok");
-                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);//保存验活密串
+                _this.$store.commit(
+                  "trckEndToETCphrtxtValSave",
+                  responseData.Data.Enc_Rslt_Info
+                ); //保存验活密串
                 if (url == "accMngt") {
                   _this.$router.push({ path: "./AccMngtCon" });
                 } else {
@@ -126,7 +128,38 @@ export default {
         );
       }
     },
-    
+    directFaceRecog(responseData) {
+      var _this = this;
+      var dataToSDK = {
+        Cst_Nm: responseData.CrdHldr_Nm,
+        Crdt_No: responseData.CrdHldr_Crdt_No,
+        phone: responseData.mblphNo
+      };
+      console.log("dataToSDK", dataToSDK);
+      window.WebViewJavascriptBridge.callHandler(
+        "invoke",
+        { action: "faceIdentify", param: dataToSDK },
+        function(responseData) {
+          console.log("刷脸返回的信息", responseData);
+          let rspCdDSC = responseData.Head.Txn_Rsp_Cd_Dsc;
+          let rspInf = responseData.Head.Txn_Rsp_Inf;
+          if (responseData.Data.Cmp_Rslt_Ind == "SUCCESS") {
+            _this.$store.commit(
+              "trckEndToETCphrtxtValSave",
+              responseData.Data.Enc_Rslt_Info
+            ); //保存验活密串
+            if (url == "accMngt") {
+              _this.$router.push({ path: "./AccMngtCon" });
+            } else {
+              _this.$router.push({ path: "./SdkActivateCon" });
+            }
+          } else {
+            Toast(rspCdDSC + rspInf);
+            return;
+          }
+        }
+      );
+    },
     gotoUrl() {
       var _this = this;
       var str = _this.$route.query.from;

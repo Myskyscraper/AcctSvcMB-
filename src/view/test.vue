@@ -78,7 +78,18 @@ export default {
       console.log("yyyyy");
     },
     alert() {
-       //_this.$store.commit("initDataSave", responseData);
+         Dialog.alert({
+                title: "提示",
+                message: "验证成功"
+              }).then(() => {
+                console.log("ok");
+                _this.$store.commit("trckEndToETCphrtxtValSave",responseData.Data.Enc_Rslt_Info);//保存验活密串
+                if (url == "accMngt") {
+                  _this.$router.push({ path: "./AccMngtCon" });
+                } else {
+                  _this.$router.push({ path: "./SdkActivateCon" });
+                }
+              });
       
     }
   }
