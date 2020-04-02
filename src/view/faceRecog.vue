@@ -19,10 +19,6 @@
     color: #000;"
     >采集本人人脸</van-button>
 
-    <div
-      style="color:red;text-align:center;font-size:12px;margin-top:10px;"
-      @click="gotoUrl()"
-    >测试跳过刷脸到内容页面</div>
   </div>
 </template>
 

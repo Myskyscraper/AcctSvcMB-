@@ -186,8 +186,10 @@ export default {
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
         "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No, //身份证号码
         "Mdf_Msg_Tp":"0",
-        "PKey_CntDsc":trckEndToETCphrtxtVal//验活密串
+        "PKey_CntDsc":trckEndToETCphrtxtVal,//验活密串
+        "MsgRp_Bag_Nm":respFromApp.MsgRp_Bag_Nm
       };
+      console.log('代扣请求信息',params);
       _this.$http("/AcctMgt/AcctSvcMB/ASMIACCSSubstColctnSign", "P5C01Q700", params, true, true)
         .then(res => {
           console.log("代扣成功", res);
