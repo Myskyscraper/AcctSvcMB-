@@ -2,7 +2,6 @@
   <div id="face_recog">
     <van-nav-bar title="人脸校验" left-arrow @click-left="back" />
     <p class="warmint_info">拍摄您本人人脸，请确保正对手机，光线充足</p>
-
     <div class="user_img_head">
       <img :src="imgUrl" />
     </div>
@@ -155,16 +154,6 @@ export default {
           }
         }
       );
-    },
-    gotoUrl() {
-      var _this = this;
-      var str = _this.$route.query.from;
-      if (str == "accMngt") {
-        _this.$router.push({ path: "./AccMngtCon" });
-      } else {
-        _this.$router.push({ path: "./SdkactivateCon" });
-      }
-      console.log("ok", str);
     }
   }
 };

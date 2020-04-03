@@ -181,7 +181,7 @@ export default {
       const trckEndToETCphrtxtVal = this.$store.state.trckEndToETCphrtxtVal;
       let params = {
         "ORG_TX_ID": "P5C01Q700",
-        "Entrst_Prj_ID": "520830254", //项目编号
+        "Entrst_Prj_ID": "520240127", //项目编号
         "TrdPCt_ID_Fst_ID":respFromApp.DbCrd_CardNo, //客户唯一编号
         "TrdPCt_AccNo": respFromApp.DbCrd_CardNo, //银行卡号
         "TrdPCt_Crdt_No": respFromApp.CrdHldr_Crdt_No, //身份证号码

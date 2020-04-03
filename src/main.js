@@ -3,7 +3,7 @@
 import './models/rem.js'
 // 引入vconsole
 import VConsole  from "vconsole"
-var vConsole = new VConsole();
+//var vConsole = new VConsole();
 // 引入vue
 import Vue from 'vue'
 import "./utils/vant.js"

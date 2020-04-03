@@ -47,10 +47,6 @@ export default new Router({
             path: "/Success",
             name: 'Success',
             component: resolve => require(['@/view/Success.vue'], resolve)
-        },{
-            path: "/test",
-            name: 'test',
-            component: resolve => require(['@/view/test.vue'], resolve)
         }
 
     ]
