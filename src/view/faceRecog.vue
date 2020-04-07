@@ -125,6 +125,7 @@ export default {
     },
     directFaceRecog(responseData) {
       var _this = this;
+      var url = _this.$route.query.from;
       var dataToSDK = {
         Cst_Nm: responseData.CrdHldr_Nm,
         Crdt_No: responseData.CrdHldr_Crdt_No,

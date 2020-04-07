@@ -3,7 +3,7 @@
      
         <div class="title">
              <i @click="closeBtn">X</i>
-            <span @click="back">返回</span>
+           
         </div>
         <div class="errimg">
             <img src="../assets/images/successico.png" alt="" />
@@ -44,9 +44,6 @@ export default {
         // console.log("组件销毁后")
     },
     methods:{
-        back(){
-            this.$router.go(-1);
-        },
         closeBtn(){
              window.WebViewJavascriptBridge.callHandler('invoke', {"action":"closeWebView"}, function(responseData) {
 
