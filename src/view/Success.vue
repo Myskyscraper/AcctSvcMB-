@@ -3,14 +3,25 @@
      
         <div class="title">
              <i @click="closeBtn">X</i>
-           
         </div>
         <div class="errimg">
             <img src="../assets/images/successico.png" alt="" />
         </div>
-        <div class="distext">
-         尊敬的用户，您已激活成功
+
+        <div v-if="!$store.state.activateFlag">
+            <div class="distext">
+                 尊敬的用户，您已激活成功
+            </div>
+            <p class="distwarning">您的卡号已成功激活，未开启代扣功能</p>
         </div>
+
+        <div  v-if="$store.state.activateFlag">
+             <div class="distext">
+                尊敬的用户，您已激活成功
+             </div>
+            <p class="distwarning">您的卡号已成功激活，并已签约代扣功能</p>
+        </div>
+        
     </div>
 </template>
 <script>
@@ -76,8 +87,12 @@ export default {
       top: .2rem;right: 0;left: 0;margin: auto;
   }
   .distext{
-     font-size: .18rem;line-height: 1.4rem;text-align: center;color: #666;
-     margin-top: 30px;
+     font-size: .18rem;text-align: center;color: #666;
+     margin:90px 0 30px;
+  }
+  .distwarning{
+       font-size: .12rem;text-align: center;color: #666;
+       margin-top: 0px;
   }
 </style>
 

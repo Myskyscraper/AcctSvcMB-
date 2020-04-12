@@ -17,26 +17,19 @@
     </ul>
 
     <div style="height:15px;"></div>
-    <p class="warning strong">您还可以办理以下自动业务</p>
-    <div class="inp-content">
-      <div class="checkbox-wrap">
-        <div class="spc contrc_wrap">
-          <van-checkbox v-model="signChecked"></van-checkbox>
-          <span class="contrc-right">&nbsp;签约贷款自动代扣还款服务</span>
-        </div>
-      </div>
-    </div>
+  
 
     <div style="height:28px;"></div>
     <!-- 手机和短信 -->
     <div class="inp-content">
       <div class="checkbox-wrap">
+
         <van-cell-group>
           <van-field v-model="custTel" placeholder="联系电话" type="tel" />
         </van-cell-group>
 
-        <van-row>
-          <van-col span="17">
+        <van-row style="border-bottom: 1px solid #ebedf0;">
+          <van-col span="17" >
             <van-field v-model="smsMes" />
           </van-col>
           <van-col span="7" class="mesBtn">
@@ -47,12 +40,10 @@
     </div>
 
     <div class="contrc_wrap_smlall">
-      <van-checkbox v-model="signChecked" style="width:25px;"></van-checkbox>
+      <van-checkbox v-model="signChecked" style="width:33px;"></van-checkbox>
       <span style="width:10px;"></span>
-      <span style="padding-right:40px;">
-        &nbsp;我已阅读并同意:
-        <router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link>
-      </span>
+      
+      <span > 您还可以开通平台自动代扣贷款还款业务，并同意<router-link to="./contract">《中国建设银行代收业务和扣款授权协议》</router-link></span>
     </div>
 
     <van-button
@@ -85,7 +76,7 @@ export default {
       smsMes: "",
       timeNum: 60,
       disabled: true, //控制提交按钮能否点击 false为可以点击 true为禁止状态
-      rulerFlag: false //展示更多
+      rulerFlag: true //展示更多
     };
   },
   created() {
@@ -219,9 +210,6 @@ export default {
       } else if (_this.smsMes.length < 4 || _this.smsMes.length >7){
         Toast("验证码格式不对，请重新输入");
         return;
-      } else if (!_this.signChecked == true) {
-        Toast("协议选项为空,请勾选协议");
-        return;
       } else {
         let params = {
           "TXN_ITT_CHNL_CGY_CODE":"30310139",
@@ -244,8 +232,13 @@ export default {
           true
         ).then(res => {
             console.log("激活成功", res);
-            _this.$store.commit("activateFlagChange",true);//激活成功做个标识
-            _this.withHoldSign();
+            //勾选了代扣协议
+            if(_this.signChecked == true){
+                _this.$store.commit("activateFlagChange",true);//激活成功做个标识
+                _this.withHoldSign();
+            }else{
+                _this.$router.push({ path: "./Success"});
+            }
           })
           .catch(err => {
             console.log("激活失败", err);
@@ -369,6 +362,8 @@ export default {
   color: #333;
 }
 .mesBtn {
-  margin-top: 9px;
+  margin-top: 7px;
 }
+
+
 </style>

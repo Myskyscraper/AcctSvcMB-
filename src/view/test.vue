@@ -103,6 +103,12 @@ export default {
           rspInf: " 处理信息不合适"
         }
       });
+    },
+    test(){
+      if (!_this.signChecked == true) {
+        Toast("协议选项为空,请勾选协议");
+        return;
+      } 
     }
   }
 };
